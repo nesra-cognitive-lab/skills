@@ -21,3 +21,32 @@ Use the documented Nesra semantic Tailwind utilities for color and other availab
 Application layout classes, wrappers, spacing, and responsive composition are ordinary customization. First use documented props and public parts for component variants and states. Extensive CSS that replaces a component's visual states, overrides its internals, or depends on private selectors is a sign that the requirement may exceed the public contract. Surface that trade-off before committing to it.
 
 The application owns accessibility that components cannot supply from context, including meaningful labels, page structure, and end-to-end keyboard flows. Check the relevant component page for what Nesra implements and what the application must provide.
+
+## Interface composition checks
+
+- Keep related headings and descriptions closer to each other than to adjacent controls or sections. Use the documented Nesra spacing roles. For example, a title and supporting copy can share a small gap inside a group with a larger gap to its action.
+- Align an icon with the first line when its adjacent text can wrap. Check the result at a narrow viewport and with longer copy; the icon should not drift to the middle of the entire text block.
+- When nesting rounded surfaces, compare the inner radius, outer radius, and padding so the corners look concentric. Choose from Nesra's documented radius and padding tokens.
+- Give sticky headers or controls a visible separation from scrolling content when the design calls for one. Use a documented Nesra stroke or elevation role and inspect the scrolled state.
+- For an animated controlled `Dialog`, keep `Dialog.Root` mounted while changing its `open` prop so the close transition can finish. Follow the current Dialog page for composition, focus behavior, and dismissal. Conditionally render the whole dialog only when no exit animation is needed.
+
+For example, group a section title and description before spacing the action away:
+
+```tsx
+import { Button } from "@nesra/ui/button";
+import { Text } from "@nesra/ui/text";
+
+export function AccountSection() {
+  return (
+    <div className="grid gap-nesra-spacing-xl">
+      <div className="grid gap-nesra-spacing-xs">
+        <Text as="h2" variant="heading5">Account details</Text>
+        <Text size="small">Review the information before saving.</Text>
+      </div>
+      <Button>Continue</Button>
+    </div>
+  );
+}
+```
+
+Use the current Text, typography, layout, shape and elevation, and Dialog documentation for exact props and tokens. These checks guide composition; the installed package and approved design still determine the implementation.
