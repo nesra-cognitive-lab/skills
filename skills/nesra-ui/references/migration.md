@@ -15,4 +15,4 @@ A similar appearance does not establish equivalent behavior. Pay particular atte
 - Review representative default, interactive, error, disabled, and responsive states that exist in the migrated scope. Run the host project's relevant format, lint, typecheck, test, and build checks.
 - Remove old dependencies, providers, wrappers, and CSS only after confirming they have no remaining consumers. Report intentional coexistence and confirmed gaps.
 
-If the user requests a complete migration but a required behavior has no confirmed Nesra equivalent, present the available choices and ask before adding another library or making a substitute. Finish unrelated mapped groups while the choice is pending.
+If the user requests a complete migration but a required behavior has no confirmed Nesra equivalent, compose public primitives or implement the application-specific behavior accessibly. Present a choice when meeting the requirement would materially change the requested behavior, design, or dependencies. Finish unrelated mapped groups while that choice is pending.
