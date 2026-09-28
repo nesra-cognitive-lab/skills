@@ -1,11 +1,13 @@
 ---
 name: nesra-ui
-description: Build or migrate React interfaces in projects that use or are adopting @nesra/ui. Guides component discovery, composition, semantic styling, and migration decisions without duplicating component APIs.
+description: Build or migrate React interfaces with @nesra/ui through its public components and composition. Preserve Nesra UI's visual design instead of extending or restyling its components.
 ---
 
 # Use Nesra UI
 
-Apply this skill when the user wants an interface built with `@nesra/ui` or wants an existing interface migrated to it. Follow the project's chosen design and scope.
+Apply this skill when the user wants an interface built with `@nesra/ui` or wants an existing interface migrated to it. Follow the requested scope while preserving Nesra UI's design system.
+
+Nesra UI is meant to be composed, not extended or extensively modified. Build screens by combining public components, documented props, and ordinary layout markup. Do not replace component styles, colors, or typography to match a separate visual system. If a requested design requires those changes, explain the mismatch and seek direction before implementing that part.
 
 ## Find the supported API
 

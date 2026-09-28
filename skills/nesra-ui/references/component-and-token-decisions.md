@@ -1,6 +1,6 @@
 # Component and token decisions
 
-Use this reference when a requested design does not map directly to a single Nesra component or needs styling beyond its defaults. Confirm every concrete import, prop, and utility in the installed package and current docs before writing it.
+Use this reference when a requested design does not map directly to a single Nesra component. Confirm every concrete import, prop, and utility in the installed package and current docs before writing it.
 
 ## Component choice
 
@@ -20,9 +20,9 @@ Prefer a toast over a block-style feedback message for transient success, error,
 
 ## Styling boundary
 
-Use the documented Nesra semantic Tailwind utilities for color and other available roles. Prefer a semantic role when one exists; use raw palette values only when the design calls for a specific primitive and no suitable role applies. Do not invent generic aliases such as `primary` or `foreground`. The current public color contract is Light Mode only.
+Use documented Nesra semantic tokens for application surfaces and layout where needed. Do not substitute another palette, typography scale, or visual system, and do not invent generic aliases such as `primary` or `foreground`. The current public color contract is Light Mode only.
 
-Application layout classes, wrappers, spacing, and responsive composition are ordinary customization. First use documented props and public parts for component variants and states. Extensive CSS that replaces a component's visual states, overrides its internals, or depends on private selectors is a sign that the requirement may exceed the public contract. Surface that trade-off before committing to it.
+Application layout, wrappers, spacing, and responsive composition are the intended ways to assemble an interface. Use documented props and public parts for component variants and states. Do not extend Nesra components or override their internal styles, colors, typography, or visual states with custom CSS or private selectors. If composition and the public API cannot meet a requirement, explain the gap before implementing that part.
 
 The application owns accessibility that components cannot supply from context, including meaningful labels, page structure, and end-to-end keyboard flows. Check the relevant component page for what Nesra implements and what the application must provide.
 
@@ -53,4 +53,4 @@ export function AccountSection() {
 }
 ```
 
-Use the current Text, typography, layout, shape and elevation, and Dialog documentation for exact props and tokens. These checks guide composition; the installed package and approved design still determine the implementation.
+Use the current Text, typography, layout, shape and elevation, and Dialog documentation for exact props and tokens. These checks guide composition; the installed package and Nesra design system determine the implementation.
