@@ -14,6 +14,10 @@ Use this reference when a requested design does not map directly to a single Nes
 
 Do not infer an API from a Figma name, a source file that is not exported, or a similar shadcn component. Do not import from `@nesra/ui/dist` or private source paths. For unfamiliar parts, check package exports, declarations, and component docs rather than guessing a compound API.
 
+## Feedback patterns
+
+Prefer a toast over a block-style feedback message for transient success, error, info, and warning states. Keep actionable validation near the affected field or control, and use a blocking dialog only when the user must make a decision before continuing. Confirm the toast API in the installed package and current docs before using it.
+
 ## Styling boundary
 
 Use the documented Nesra semantic Tailwind utilities for color and other available roles. Prefer a semantic role when one exists; use raw palette values only when the design calls for a specific primitive and no suitable role applies. Do not invent generic aliases such as `primary` or `foreground`. The current public color contract is Light Mode only.
