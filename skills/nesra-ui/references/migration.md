@@ -11,7 +11,7 @@ A similar appearance does not establish equivalent behavior. Pay particular atte
 ## Change and verify
 
 - Replace usages in reviewable groups. Import only public Nesra entrypoints and apply the documented stylesheet setup once for the host app.
-- Translate old color and role classes to documented Nesra semantic utilities. Preserve layout and interaction intent rather than carrying over selectors that target the old library's internals.
+- Replace old visual styles with the documented Nesra components and semantic tokens. Preserve layout and interaction intent, but do not carry over the old library's colors, typography, component overrides, or selectors that target internals.
 - Review representative default, interactive, error, disabled, and responsive states that exist in the migrated scope. Run the host project's relevant format, lint, typecheck, test, and build checks.
 - Remove old dependencies, providers, wrappers, and CSS only after confirming they have no remaining consumers. Report intentional coexistence and confirmed gaps.
 
