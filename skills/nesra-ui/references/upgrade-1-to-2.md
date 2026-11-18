@@ -5,7 +5,7 @@ Use this reference only when the user asks to move a project from `@nesra/ui` 1.
 ## Plan
 
 1. Confirm the installed version is 1.x and that the user wants the upgrade now. Some apps stay on 1.x on purpose.
-2. Install 2.x (`pnpm add @nesra/ui@2`, or the project's package manager). Keep the stylesheet setup from the Installation page. Add Source Code Pro (400, 500) next to Inter.
+2. Install 2.x (`pnpm add @nesra/ui@2`, or the project's package manager). Keep the stylesheet setup from the Installation page. Load Manrope (400, 500, 600, 700) instead of Inter, and Source Code Pro (400, 500) for the Code styles. Table rows are 32px by default; see the Table page for 40px rows.
 3. Inventory before changing anything. Run the search commands from the guide's "Search commands" section and record the hits by group: colors, spacing, radius, text styles, shadows, and the component props below.
 
 ## The five high-impact changes

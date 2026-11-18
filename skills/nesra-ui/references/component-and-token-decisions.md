@@ -35,6 +35,9 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | Field height | `size` `"sm"`, `"md"` (default, 38px), or `"lg"` on `Input`, `InputGroup`, `Select`, `Combobox` | The native numeric `size` attribute or custom heights |
 | Avatar size | The Figma names `xs` 24px, `sm` 32px, `md` 40px, `lg` 48px, `xl` 56px, `2xl` 64px | The 1.x names, which shifted one step |
 | Button size | `xs` 26px, `sm` 34px, `md` 38px (default), `lg` 42px, `xl` 50px. Button sizes child icons itself. | A `size` prop on the icon |
+| Loading placeholder for content that AI is generating | `Skeleton tone="ai"` (the spectrum fill) | `tone="teal"` or a custom gradient |
+| An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. | Picking a color per person |
+| Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
 
 ## Feedback patterns
 
@@ -52,6 +55,16 @@ In 2.x, every token is a `--nesra-*` CSS variable named after its Figma 2.0 vari
 - The radius scale moved one step from 1.x: `rounded-nesra-md` is 8px and `rounded-nesra-lg` is 10px.
 - Do not use raw palette values (`bg-blue-500`, hex colors) or arbitrary values (`p-[13px]`) when a token or the Tailwind scale expresses the intent. Use the `utility-*` ramps for categorical color.
 - Do not use the `--nesra-v2-*` names from the 2.0 pre-release or the deprecated legacy tokens (`categorical-violet-*`, `categorical-teal-*`, `chart-mono-*`, `chart-blue-*`) in new code.
+
+### Before you pick a color
+
+Run this check against the Color language section of the docs Colors page (https://ui.nesra.ai/colors/#color-language). It is a checklist, not a copy of that page.
+
+- Give each color one meaning: neutral for content and structure, indigo for active, selected, in progress, or clickable, the spectrum for an AI result or a special moment.
+- Never use the spectrum for selection or focus, status, data categories, long text, form controls, or navigation icons. Keep at most one macro spectrum moment per screen.
+- Never use Rose or Orange alone as an accent.
+- Never replace a status color (error, warning, success) or a data color (`chart-series-*`) with a brand color.
+- Prefer a component that already applies the recipe (Checkbox, Tabs, Filters, AI components) over coloring a custom element.
 
 Find token names on the Colors, Typography, Layout, and Shape and elevation pages rather than guessing them. This skill does not copy the token catalog.
 
