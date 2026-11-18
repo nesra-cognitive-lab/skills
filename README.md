@@ -6,9 +6,9 @@ Reusable Agent Skills for work across Nesra projects. Each skill lives in `skill
 
 | Skill | Use it for |
 | --- | --- |
-| [`nesra-ui`](skills/nesra-ui/SKILL.md) | Building React interfaces with `@nesra/ui` or migrating existing interfaces to it. |
+| [`nesra-ui`](skills/nesra-ui/SKILL.md) | Building React interfaces with `@nesra/ui` 1.x or 2.x, migrating existing interfaces to it, or upgrading a project from 1.x to 2.x. |
 
-The `nesra-ui` skill contains [component and token decisions](skills/nesra-ui/references/component-and-token-decisions.md) and a [migration workflow](skills/nesra-ui/references/migration.md). Exact component APIs remain in the public package and Nesra UI documentation.
+The `nesra-ui` skill checks the installed `@nesra/ui` major first and follows it. It contains [component and token decisions](skills/nesra-ui/references/component-and-token-decisions.md), a [migration workflow](skills/nesra-ui/references/migration.md), and an [upgrade workflow from 1.x to 2.x](skills/nesra-ui/references/upgrade-1-to-2.md). Exact component APIs remain in the public package and Nesra UI documentation.
 
 ## Install
 
