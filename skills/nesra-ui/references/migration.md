@@ -1,6 +1,6 @@
 # Migration workflow
 
-Use this reference when replacing an existing component library or custom component set with `@nesra/ui`. Migrate only the scope the user requested.
+Use this reference when replacing an existing component library or custom component set with `@nesra/ui`. Migrate only the scope the user requested. To move a project from `@nesra/ui` 1.x to 2.x, use [upgrade from 1.x to 2.x](upgrade-1-to-2.md) instead.
 
 ## Inventory and mapping
 
