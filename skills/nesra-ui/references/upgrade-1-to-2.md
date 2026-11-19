@@ -35,4 +35,4 @@ Check these first, because TypeScript catches only some of them:
 
 ## When something has no 2.0 counterpart
 
-The guide marks some tokens "pending design" and some APIs deprecated. Report each one to the user with its location and the guide's suggestion. Do not restyle component internals, copy 1.0 values into custom CSS, or add a substitute component to recreate the 1.x look.
+2.x removes every component, variant, size, and color that the Figma Lymo Design System does not have. The guide's "Removed in 2.0" table lists each one with its replacement, and the type check reports every use. Replace each use with the listed replacement. When the table says a replacement is planned or there is none, report the use to the user with its location. Do not restyle component internals, copy 1.0 values into custom CSS, or add a substitute component to recreate the 1.x look.
