@@ -38,13 +38,15 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | Loading placeholder for content that AI is generating | `Skeleton tone="ai"` (the spectrum fill) | The removed `tone="teal"` or a custom gradient |
 | An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. | Picking a color per person |
 | Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
-| A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, or `"688"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
+| A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, `"688"`, `"720"`, or `"800"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
 | A filter button for a toolbar | `Filters.Trigger` with `count` | A `Button` restyled to 36px |
 | A search field with a shortcut hint | `InputGroup.Shortcut` inside a search `InputGroup` | A hand-built `kbd` |
 | Progress through a few labelled steps | `ProgressTextWithLine` from `@nesra/ui/indicator`, or `Stepper` for numbered steps | The removed `StepIndicator` |
 | A term with a definition on hover | `RichTooltip`, or `AiInlineInsight.Why` for an AI insight | The removed `TooltipTrigger` |
 | Calendar event colors | `gray`, `brand`, `green`, `blue`, `purple`, `pink`, `orange`, `yellow` | `indigo`, which was removed |
 | Chart colors | `series-1` to `series-8`, `heat-1` to `heat-4`, `positive`, `negative`, `neutral`, and the `series` and `heat` palettes. `ChartBand` and `ChartMarker` take `neutral` or `ai`. | The removed categorical names (`blue`, `teal`, `violet`, …), `mono-*`, `blue-*` |
+| A line chart with several series | Solid lines for every series, told apart by `series-*` color and the legend. Dash only a comparison series (`dashed: true`, Figma Dashed comparison). | Dashes or markers to separate ordinary series |
+| A Figma Lymo component not listed here | The matching row in [Lymo components in 2.x](lymo-components.md) | Building it by hand from a Figma screenshot |
 | An AI result that failed to load | `AiInlineInsight.Error`, or `state="error"` with `onRetry` on `AiInsights`, `AiExplanationPopover`, and `AiDriverBreakdown` | A custom error line |
 
 ## Feedback patterns
