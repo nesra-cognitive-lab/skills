@@ -17,6 +17,8 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Progress as a bar or ring | `ProgressBar` (`label` `right`, `bottom`, `top-floating`, `bottom-floating`, `none`) or `ProgressCircle` (`size` `xxs`–`lg`, `shape` `circle` or `half-circle`) |
 | A compact toggle | `Switch variant="slim"` |
 | A segmented control item with a status dot | `ButtonGroup.Item dot` |
+| A row of badges with a lead label | `BadgeGroup` |
+| A 24 or 28px toolbar icon action | `UtilityButton` |
 | Avatar with a count or avatar badge, a name and email, or a large profile photo | `Avatar` `status="count"` or `"avatar"`, `Avatar.LabelGroup`, `Avatar.ProfilePhoto` (`verified`) |
 | A range or single value slider | `Slider` (`orientation="vertical"` for a Y range) |
 | A selectable card list | `RadioGroup` `variant` (`radio-button`, `checkbox`, `icon-simple`, `avatar`, `payment-icon`, `icon-card`) |
@@ -37,7 +39,7 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | A card at the bottom of the sidebar (usage, upgrade, onboarding, support) | `Sidebar.FeaturedCard` with `Sidebar.FeaturedCardTitle`, `Sidebar.FeaturedCardDescription`, `Sidebar.FeaturedCardActions`. Compose the Figma types from other components. |
 | A top header with links | Compose `NavigationMenuItem`, an icon button, and `DropdownMenu.AccountTrigger` (Page Headers docs). There is no header export. |
 | A KPI group with a title, an AI insight, and a source | `KpiGroup.Header`, `KpiGroup.Insight`, `KpiGroup.Source` |
-| Rich table cells, toolbar, filter row, summary, footer | `Table.*Cell` parts, `Table.Toolbar`, `Table.ToolbarButton`, `Table.FilterRow`, `Table.FilterCell`, `Table.SummaryCell`, `Table.FooterBar`, `Table.StatusBar` |
+| Rich table cells, toolbar, filter row, summary, footer | `Table.*Cell` parts with `Table.LeadAction`, `Table.StateIcon`, `Table.PriorityIcon`, `Table.Toolbar`, `Table.ToolbarButton`, `Table.FilterRow`, `Table.FilterCell`, `Table.SummaryCell`, `Table.FooterBar`, `Table.StatusBar` |
 | Pages, dots, or a carousel | `Pagination` (`type`, `breakpoint`), `Pagination.DotGroup`, `Carousel` |
 | A tree list | `TreeView` (not `TableTree`, which is a table) |
 | Account, search, or integrations in a dropdown | `DropdownMenu.AccountTrigger`, `DropdownMenu.AccountItem`, `DropdownMenu.Search`, `DropdownMenu.Footer` |
@@ -50,7 +52,7 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Section headings and footers | `SectionHeader`, `SectionLabel`, `SectionFooter` |
 | An inline call to action | `InlineCta` |
 | A command palette | `CommandMenu` |
-| A color picker | `ColorPicker` with `ColorPicker.Gradient` and `ColorPicker.ImageFill` |
+| A color picker | `ColorPicker` with `ColorPicker.Gradient` and `ColorPicker.ImageFill`; `toCssGradient` turns a gradient value into CSS |
 | An activity feed | `Timeline` with `Timeline.List divider` (`connector`, `line`, `none`) and `Timeline.Item size` (`sm`, `md`) |
 | A file upload row | `FileUploadCard` `type` (`progress-bar`, `progress-fill`) and `iconType` (`file-type`, `simple`) |
 | A message composer | `MessageComposer variant` `minimal`, `textarea`, or `advanced` (with `MessageComposer.Footer` and `MessageComposer.FooterButton`) |
@@ -70,8 +72,12 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Packed circles sized by value | `PackedBubbleChart` |
 | A small trend without axes | `Sparkline` (`trend` `positive`, `negative`, `neutral`; `type` `line`, `area`, `bar`) |
 | Funnel, radar, radial, heatmap, waterfall, Sankey | `FunnelChart`, `RadarChart`, `RadialChart`, `Heatmap`, `WaterfallChart`, `SankeyChart` |
-| A chart inside a titled card with a legend | `ChartCard` with `ChartLegend`; a chart inside it drops its own surface |
+| A chart inside a titled card with a legend | `ChartCard` with `ChartLegend`; a chart inside it drops its own surface. `ChartReferenceLine` draws an average or target line. |
 | Widget plots | `ProportionBarChart`, `TimelineBandChart`, `RangeBarChart`, `LollipopChart`, `QuadrantChart` (`rangeSliders`) |
+
+## Constants and helpers
+
+To list the Figma options in your own UI (a picker, a filter, a test), use the exported lists instead of copying values: `PAYMENT_METHODS`, `INTEGRATION_ICON_NAMES`, `SOCIAL_ICON_PLATFORMS`, `SOCIAL_BUTTON_SOCIALS`, `MOBILE_APP_STORES`, `BACKGROUND_PATTERN_TYPES`, `BACKGROUND_PATTERN_DECORATIVE_TYPES`, `BACKGROUND_OVERLAY_TYPES`, `SUPER_GRAPHIC_LIFTED_LINES_VARIANTS`, `SUPER_GRAPHIC_PIXEL_INSIGHT_VARIANTS`, `SUPER_GRAPHIC_FACET_VARIANTS`, `ILLUSTRATION_SCENES`, `LYMO_MASCOT_POSES`, `LYMO_LOADING_STATES`, `FILE_TYPE_ICON_TYPES`, `CODE_SNIPPET_LANGUAGES`. `getPaymentMethodLabel`, `getIntegrationIconLabel`, and `getSocialIconLabel` return the accessible name of a mark. `closeButtonVariants` and `utilityButtonVariants` give the classes of those buttons for an element that must match them; prefer the components.
 
 ## Removed in 2.x, with the replacement
 
