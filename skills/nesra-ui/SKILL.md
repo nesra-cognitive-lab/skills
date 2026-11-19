@@ -9,6 +9,10 @@ Apply this skill when the user wants an interface built with `@nesra/ui` or want
 
 Nesra UI is meant to be composed, not extended or extensively modified. Build screens by combining public components, documented props, and ordinary layout markup. Do not replace component styles, colors, or typography to match a separate visual system. If a requested design requires those changes, explain the mismatch and seek direction before implementing that part.
 
+## Lymo is the source of truth in 2.x
+
+`@nesra/ui` 2.x is rebuilt from the Figma Lymo Design System. A component, type, variant, size, or color that Lymo does not have does not exist in 2.x: it was removed, with no deprecated alias. Do not recreate a removed component or variant from memory, from 1.x code, or from another library. If a screen needs something that is not in the installed 2.x package, explain the gap and ask before building a substitute.
+
 ## Check the installed version first
 
 Before writing any import, prop, or token, find the `@nesra/ui` version the project uses: the `version` in `node_modules/@nesra/ui/package.json`, the resolved version in the lockfile (`pnpm-lock.yaml`, `package-lock.json`, or `yarn.lock`), or the range in the app's `package.json`. Then follow that major.
