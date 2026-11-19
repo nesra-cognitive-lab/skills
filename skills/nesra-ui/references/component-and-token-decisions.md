@@ -31,12 +31,13 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | Transient success, error, info, or warning | `Toast` (keep the feedback rule below) | A banner or dialog |
 | A persistent page or section message | `InformationBanner` `variant="floating"` (default) or `"full-width"`, `color` `default`, `gray`, `brand`, `error`, `warning`, or `success` | A Toast, or the removed `basic`, `gradient`, `soft` variants and categorical colors |
 | A decision the user must make before continuing, such as deleting | `Dialog` | A Toast or banner |
+| The application top bar with logo, links, and account | `HeaderNavigation` from `@nesra/ui/header-navigation` (`type` `simple`, `dual-tier`, `tabs`, `centered`, `plane`) with its mobile `Drawer` | A hand-built `header` with `NavigationMenuItem`s and a separate mobile menu |
 | A page title area with description and actions | `PageHeader` from `@nesra/ui/page-header` | Hand-built heading markup |
 | Field height | `size` `"sm"`, `"md"` (default, 38px), or `"lg"` on `Input`, `InputGroup`, `Select`, `Combobox` | The native numeric `size` attribute or custom heights |
 | Avatar size | The Figma names `xs` 24px, `sm` 32px, `md` 40px, `lg` 48px, `xl` 56px, `2xl` 64px | The 1.x names, which shifted one step |
 | Button size | `xs` 26px, `sm` 34px, `md` 38px (default), `lg` 42px, `xl` 50px. Button sizes child icons itself. | A `size` prop on the icon |
 | Loading placeholder for content that AI is generating | `Skeleton tone="ai"` (the spectrum fill) | The removed `tone="teal"` or a custom gradient |
-| An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. | Picking a color per person |
+| An avatar without an image | `Avatar` with two-letter `initials` or the default icon. Its fallback is one neutral gray in 2.x (`bg-tertiary`, dark gray in Dark). Initials show at most two characters and are never truncated. | Picking a color per person, or truncating initials |
 | Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
 | A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, `"688"`, `"720"`, or `"800"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
 | A filter button for a toolbar | `Filters.Trigger` with `count` | A `Button` restyled to 36px |
