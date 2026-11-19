@@ -19,7 +19,7 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | A segmented control item with a status dot | `ButtonGroup.Item dot` |
 | A row of badges with a lead label | `BadgeGroup` |
 | A 24 or 28px toolbar icon action | `UtilityButton` |
-| Avatar with a count or avatar badge, a name and email, or a large profile photo | `Avatar` `status="count"` or `"avatar"`, `Avatar.LabelGroup`, `Avatar.ProfilePhoto` (`verified`) |
+| Avatar with a count or avatar badge, a name and email, or a large profile photo | `Avatar` `status="count"` or `"avatar"`, `Avatar.LabelGroup`, `Avatar.ProfilePhoto` (`verified`). `initials` shows at most two characters and is never truncated, so pass two letters. |
 | A range or single value slider | `Slider` (`orientation="vertical"` for a Y range) |
 | A selectable card list | `RadioGroup` `variant` (`radio-button`, `checkbox`, `icon-simple`, `avatar`, `payment-icon`, `icon-card`) |
 | A loading spinner or dots | `LoadingIndicator` (`line-simple`, `line-spinner`, `dot-circle`) |
@@ -27,7 +27,7 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Code with copy and syntax colors | `CodeSnippet` (`language`, `CODE_SNIPPET_LANGUAGES`) |
 | A video | `VideoPlayer` |
 | A rich text field | `TextEditorEditor` from `@nesra/ui/text-editor-tiptap`; `TextEditor` is the frame and toolbar without an engine |
-| Brand, payment, integration, and store marks | `SocialIcon`, `PaymentMethodIcon`, `IntegrationIcon`, `SocialButton`, `SocialButtonGroup`, `MobileAppStoreBadge` |
+| Brand, payment, integration, and store marks | `SocialIcon`, `PaymentMethodIcon`, `IntegrationIcon`, `SocialButton`, `SocialButtonGroup`, `MobileAppStoreBadge`. `SocialButton social` is `google`, `facebook`, or `apple` (the Figma Social button group); Apple `brand` is a black button. |
 | Decorative backgrounds and illustrations | `BackgroundPattern`, `BackgroundPatternDecorative`, `BackgroundOverlay`, `SuperGraphicLiftedLines`, `SuperGraphicPixelInsight`, `SuperGraphicFacet`, `Illustration`, `LymoMascot`, `LymoLoader`, `LymoProgressBar`, `LymoLoadingStatus`, `EmptyState.Illustration` |
 
 ## Application components
@@ -37,9 +37,12 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Switch between products in the sidebar | `Sidebar.PlatformSwitcher` with `Sidebar.PlatformMenu` and `Sidebar.PlatformLogo` |
 | A product rail or a mobile bottom bar | `AppRail`, `MobileTabBar` |
 | A card at the bottom of the sidebar (usage, upgrade, onboarding, support) | `Sidebar.FeaturedCard` with `Sidebar.FeaturedCardTitle`, `Sidebar.FeaturedCardDescription`, `Sidebar.FeaturedCardActions`. Compose the Figma types from other components. |
-| A top header with links | Compose `NavigationMenuItem`, an icon button, and `DropdownMenu.AccountTrigger` (Page Headers docs). There is no header export. |
+| The application top bar (Figma Header navigation) | `HeaderNavigation` from `@nesra/ui/header-navigation` with `type` `simple`, `dual-tier`, `tabs`, `centered`, or `plane` (`HEADER_NAVIGATION_TYPES`). Compose `HeaderNavigation.Bar` with `.Logo`, `.Nav` (requires `aria-label`) and `.NavItem` (`current`), `.Actions`, `.NavButton` (`label`, `icon`, `count` for the unread counter), and `.MenuButton`. Add `.SecondaryBar` for the second row (Figma Desktop open); omit it to hide that row. Plane uses `.Brand` (`mark`), `.Workspace`, `.Tagline`, `.Title` (`parent`), and `.MobileActions`. The header switches to Mobile below 896px of its own width; do not add a breakpoint prop or duplicate the bar. |
+| The mobile menu of the header | `HeaderNavigation.Drawer` (`label`), opened by `.MenuButton`; control it with `open`, `defaultOpen`, `onOpenChange` on the root. Fill it with Sidebar parts (`Sidebar.Content`, `Sidebar.Menu`, `Sidebar.MenuButton`, `Sidebar.Collapsible` with `Sidebar.MenuSub`, `Sidebar.Footer`, `Sidebar.AccountCard`); the drawer provides their context. |
 | A KPI group with a title, an AI insight, and a source | `KpiGroup.Header`, `KpiGroup.Insight`, `KpiGroup.Source` |
 | Rich table cells, toolbar, filter row, summary, footer | `Table.*Cell` parts with `Table.LeadAction`, `Table.StateIcon`, `Table.PriorityIcon`, `Table.Toolbar`, `Table.ToolbarButton`, `Table.FilterRow`, `Table.FilterCell`, `Table.SummaryCell`, `Table.FooterBar`, `Table.StatusBar` |
+| A Filter button that opens filters | `Table.ToolbarButton` has no behavior of its own. Either toggle `Table.FilterRow` with `onClick` and set `aria-expanded` (not only `active`), or make it the trigger of a `Popover` or `DropdownMenu` with `render={<Table.ToolbarButton icon={…}>Filter</Table.ToolbarButton>}`. Show the number of active filters with `count`. Filtering and data loading stay in the app. |
+| Work items as a grouped list or a Kanban board | `Table.List` with `Table.ListGroupHeader` (`name`, `count`, `icon`, `as`, `onAdd` with `addLabel`) and `Table.ListRow` (`code`, `title`, `properties`, `assignee`, `actions`); `Table.BoardCard` (`code`, `title`, `platform`, `properties`, `assignee`; with `onClick` it is one button) in your own board columns. Use the list or board for items people scan or move by status; use `Table` when they compare values across columns, sort, or select rows. |
 | Pages, dots, or a carousel | `Pagination` (`type`, `breakpoint`), `Pagination.DotGroup`, `Carousel` |
 | A tree list | `TreeView` (not `TableTree`, which is a table) |
 | Account, search, or integrations in a dropdown | `DropdownMenu.AccountTrigger`, `DropdownMenu.AccountItem`, `DropdownMenu.Search`, `DropdownMenu.Footer` |
@@ -77,7 +80,16 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 
 ## Constants and helpers
 
-To list the Figma options in your own UI (a picker, a filter, a test), use the exported lists instead of copying values: `PAYMENT_METHODS`, `INTEGRATION_ICON_NAMES`, `SOCIAL_ICON_PLATFORMS`, `SOCIAL_BUTTON_SOCIALS`, `MOBILE_APP_STORES`, `BACKGROUND_PATTERN_TYPES`, `BACKGROUND_PATTERN_DECORATIVE_TYPES`, `BACKGROUND_OVERLAY_TYPES`, `SUPER_GRAPHIC_LIFTED_LINES_VARIANTS`, `SUPER_GRAPHIC_PIXEL_INSIGHT_VARIANTS`, `SUPER_GRAPHIC_FACET_VARIANTS`, `ILLUSTRATION_SCENES`, `LYMO_MASCOT_POSES`, `LYMO_LOADING_STATES`, `FILE_TYPE_ICON_TYPES`, `CODE_SNIPPET_LANGUAGES`. `getPaymentMethodLabel`, `getIntegrationIconLabel`, and `getSocialIconLabel` return the accessible name of a mark. `closeButtonVariants` and `utilityButtonVariants` give the classes of those buttons for an element that must match them; prefer the components.
+To list the Figma options in your own UI (a picker, a filter, a test), use the exported lists instead of copying values: `PAYMENT_METHODS`, `INTEGRATION_ICON_NAMES`, `SOCIAL_ICON_PLATFORMS`, `SOCIAL_BUTTON_SOCIALS`, `HEADER_NAVIGATION_TYPES`, `MOBILE_APP_STORES`, `BACKGROUND_PATTERN_TYPES`, `BACKGROUND_PATTERN_DECORATIVE_TYPES`, `BACKGROUND_OVERLAY_TYPES`, `SUPER_GRAPHIC_LIFTED_LINES_VARIANTS`, `SUPER_GRAPHIC_PIXEL_INSIGHT_VARIANTS`, `SUPER_GRAPHIC_FACET_VARIANTS`, `ILLUSTRATION_SCENES`, `LYMO_MASCOT_POSES`, `LYMO_LOADING_STATES`, `FILE_TYPE_ICON_TYPES`, `CODE_SNIPPET_LANGUAGES`. `getPaymentMethodLabel`, `getIntegrationIconLabel`, and `getSocialIconLabel` return the accessible name of a mark. `closeButtonVariants` and `utilityButtonVariants` give the classes of those buttons for an element that must match them; prefer the components.
+
+## Light and Dark
+
+Every component follows the page theme through its tokens. Do not add `dark:` classes or swap colors yourself.
+
+- `data-theme` is reserved for the Light and Dark token scope. `BadgeGroup` exposes its Figma Theme as `data-badge-theme`; select on that, never on `data-theme`, for a Badge group style.
+- The Avatar fallback and `Avatar.Group` count use `bg-tertiary`, which turns dark gray in Dark.
+- Received `Message.Bubble`s are `bg-secondary`, sent ones `utility-brand-50`; both turn dark in Dark.
+- In Storybook, the Docs tab scopes each story's theme to the story (`data-slot="sb-theme-scope"`), so a Dark story no longer darkens the page. A Dark story whose content renders in a portal (popover, dialog, sheet, drawer, toast) sets `parameters.docs.story = { inline: false, height }`, so the portal stays dark.
 
 ## Removed in 2.x, with the replacement
 
