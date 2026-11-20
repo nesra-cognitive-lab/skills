@@ -83,6 +83,11 @@ Each `GridColumn` has `key`, `label`, `type`, and `width` (required), plus optio
   becomes a `treegrid` with `aria-level` and `aria-expanded`. Paging counts data rows, and group
   headers repeat on each page. xlsx export keeps the groups as an outline with `SUBTOTAL` formulas;
   CSV has data rows only.
+- Date filters: the calendar button in a date filter cell, or Alt+Down there, opens a calendar.
+  Above the days, a comparison row: On (`=`, default), After (`>`), Before (`<`), On or after
+  (`>=`), On or before (`<=`). Picking writes `2026-01-31` or `> 2026-01-31`. A typed filter opens
+  on its day and comparison. A range opens on its first day and a pick replaces it, so ranges are
+  typed. Typed filters work as before.
 - Motion: sorted rows slide to their new place, the active-cell and range outlines glide, and totals
   and counts count up. Screen readers get only the final value. All motion stops when the user
   prefers reduced motion. Keep `motion.tsx` with the other files.
@@ -94,5 +99,14 @@ Text `olivia`, `=exact`, `!excluded`. Numbers `> 100`, `>= 5`, `!= 0`, `10..50`.
 
 ## Limits
 
-No row virtualization (pages of 25, 50, or 100 rows), and no calendar in the filter row: use typed
-date filters there.
+No row virtualization (pages of 25, 50, or 100 rows). The filter calendar picks one day: type
+ranges (`2026-01-01..2026-03-31`), months (`2026-03`), and years (`2026`).
+
+## Date filter calendar outside the grid
+
+For a plain `Table` filter row, `Table.FilterCell type="date"` takes `onDateSelect(date)`: the
+calendar icon becomes a button (and Alt+Down in the input) that opens the DatePicker calendar in a
+Popover and passes the picked ISO day. The cell does not change its own text, so set the filter
+value in the callback. `calendarValue` is the ISO day to open on, `calendarLabel` names the button
+(default "Choose a date for {label}"), and `calendarHeader` adds content above the days. Without
+`onDateSelect` the icon is decorative.
