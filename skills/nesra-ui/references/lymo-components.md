@@ -40,9 +40,13 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | A top header with links | Compose `NavigationMenuItem`, an icon button, and `DropdownMenu.AccountTrigger` (Page Headers docs). There is no header export. |
 | A KPI group with a title, an AI insight, and a source | `KpiGroup.Header`, `KpiGroup.Insight`, `KpiGroup.Source` |
 | Rich table cells, toolbar, filter row, summary, footer | `Table.*Cell` parts with `Table.LeadAction`, `Table.StateIcon`, `Table.PriorityIcon`, `Table.Toolbar`, `Table.ToolbarButton`, `Table.FilterRow`, `Table.FilterCell`, `Table.SummaryCell`, `Table.FooterBar`, `Table.StatusBar` |
+| Table toolbar menus (Filter, Columns, Display, Export) | `Table.ToolbarButton` as the `render` of `DropdownMenu.Trigger` or `Popover.Trigger`; it is Active while its menu is open. Filter toggles `Table.FilterRow open`. Columns uses `DropdownMenu.CheckboxItem indicator="checkbox"` with `DropdownMenu.Search` and `DropdownMenu.FooterButton`; Display uses `DropdownMenu.RadioGroup` with `DropdownMenu.RadioItem`; Export uses `DropdownMenu.Item` with `DropdownMenu.Shortcut` (".csv") |
+| A multi-value filter in the filter row (Figma Select filter, "3 of 4") | `Table.FilterCell type="multi-select"` |
+| An editable spreadsheet grid (Figma Table with toolbar, filter row, totals, status bar) | The Data grid example, copied into the app. It is not an export: see [Data grid in 2.x](data-grid.md) |
 | Pages, dots, or a carousel | `Pagination` (`type`, `breakpoint`), `Pagination.DotGroup`, `Carousel` |
 | A tree list | `TreeView` (not `TableTree`, which is a table) |
 | Account, search, or integrations in a dropdown | `DropdownMenu.AccountTrigger`, `DropdownMenu.AccountItem`, `DropdownMenu.Search`, `DropdownMenu.Footer` |
+| One choice, or checkboxes, in a dropdown | `DropdownMenu.RadioGroup` with `DropdownMenu.RadioItem`; `DropdownMenu.CheckboxItem` with `indicator="checkbox"` and `indeterminate` for a Select all |
 | Notification types | `Toast` `type` `avatar`, `image`, `progress`, `ai` |
 | Page header styles | `PageHeader variant` (9 Figma styles) with `PageHeader.Banner`, `.Avatar`, `.Search`, `.Count` |
 | A date and time field | `DateTimeInput` |

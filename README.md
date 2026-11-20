@@ -8,7 +8,7 @@ Reusable Agent Skills for work across Nesra projects. Each skill lives in `skill
 | --- | --- |
 | [`nesra-ui`](skills/nesra-ui/SKILL.md) | Building React interfaces with `@nesra/ui` 1.x or 2.x, migrating existing interfaces to it, or upgrading a project from 1.x to 2.x. |
 
-The `nesra-ui` skill checks the installed `@nesra/ui` major first and follows it. It contains [component and token decisions](skills/nesra-ui/references/component-and-token-decisions.md), a [Lymo components in 2.x](skills/nesra-ui/references/lymo-components.md) map, a [migration workflow](skills/nesra-ui/references/migration.md), and an [upgrade workflow from 1.x to 2.x](skills/nesra-ui/references/upgrade-1-to-2.md). Exact component APIs remain in the public package and Nesra UI documentation.
+The `nesra-ui` skill checks the installed `@nesra/ui` major first and follows it. It contains [component and token decisions](skills/nesra-ui/references/component-and-token-decisions.md), a [Lymo components in 2.x](skills/nesra-ui/references/lymo-components.md) map, a [Data grid in 2.x](skills/nesra-ui/references/data-grid.md) guide for the copyable spreadsheet grid, a [migration workflow](skills/nesra-ui/references/migration.md), and an [upgrade workflow from 1.x to 2.x](skills/nesra-ui/references/upgrade-1-to-2.md). Exact component APIs remain in the public package and Nesra UI documentation.
 
 ## Install
 
