@@ -32,17 +32,19 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | A persistent page or section message | `InformationBanner` `variant="floating"` (default) or `"full-width"`, `color` `default`, `gray`, `brand`, `error`, `warning`, or `success` | A Toast, or the removed `basic`, `gradient`, `soft` variants and categorical colors |
 | A decision the user must make before continuing, such as deleting | `Dialog` | A Toast or banner |
 | A page title area with description and actions | `PageHeader` from `@nesra/ui/page-header` | Hand-built heading markup |
-| Field height | `size` `"sm"`, `"md"` (default, 38px), or `"lg"` on `Input`, `InputGroup`, `Select`, `Combobox` | The native numeric `size` attribute or custom heights |
+| Field height | `size` `"sm"`, `"md"` (default, 38px), or `"lg"` on `Input`, `InputGroup`, `TagsInput`, `Select`, `Combobox`, `MultiSelect`. Pass `label`, `description`, and `error` to the control itself: at `lg` they render in Text md (16/24), so a `lg` field with label and hint is 106px. A hand-composed `Field` always uses Text sm. | The native numeric `size` attribute, custom heights, or a text class on the label |
+| A multiline field | `Textarea` `size` `"sm"` (110px minimum) or `"md"` (default, 128px minimum). Use `rows` for more lines. | A `min-h-*` class to recreate the 1.x 80px height |
 | Avatar size | The Figma names `xs` 24px, `sm` 32px, `md` 40px, `lg` 48px, `xl` 56px, `2xl` 64px | The 1.x names, which shifted one step |
 | Button size | `xs` 26px, `sm` 34px, `md` 38px (default), `lg` 42px, `xl` 50px. Button sizes child icons itself. | A `size` prop on the icon |
 | Loading placeholder for content that AI is generating | `Skeleton tone="ai"` (the spectrum fill) | The removed `tone="teal"` or a custom gradient |
-| An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. | Picking a color per person |
+| An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. The `border-secondary` line is drawn inside the circle (0.5px `xs`, 0.75px `sm`, 1px from `md`); a photo fills the circle with a faint 0.5px edge. | Picking a color per person, or adding a `border` or `ring` class to `Avatar` |
 | Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
 | A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, `"688"`, `"720"`, or `"800"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
 | A filter button for a toolbar | `Filters.Trigger` with `count` | A `Button` restyled to 36px |
 | A table whose filter row opens and closes | `Table.FilterRow open` toggled by a `Table.ToolbarButton` with `aria-expanded` and `aria-controls`, and `layout="fixed"` with a `<colgroup>` so columns do not move | `hidden` toggling in `layout="auto"`, which shifts column widths |
 | A spreadsheet-style editable grid | Copy the Data grid example ([Data grid in 2.x](data-grid.md)) | Importing a `DataGrid` from `@nesra/ui`, which does not exist, or adding another grid library |
 | A search field with a shortcut hint | `InputGroup.Shortcut` inside a search `InputGroup` | A hand-built `kbd` |
+| The search in a Filters bar or Page header (Figma Select Type=Search) | `InputGroup size="sm"` with a `Search` icon in `InputGroup.Addon`, 280px wide; next to `size="sm"` Selects the Filters bar is 36px | A `md` `Input`, which makes the bar 38px |
 | Progress through a few labelled steps | `ProgressTextWithLine` from `@nesra/ui/indicator`, or `Stepper` for numbered steps | The removed `StepIndicator` |
 | A term with a definition on hover | `RichTooltip`, or `AiInlineInsight.Why` for an AI insight | The removed `TooltipTrigger` |
 | Calendar event colors | `gray`, `brand`, `green`, `blue`, `purple`, `pink`, `orange`, `yellow` | `indigo`, which was removed |
@@ -50,6 +52,14 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | A line chart with several series | Solid lines for every series, told apart by `series-*` color and the legend. Dash only a comparison series (`dashed: true`, Figma Dashed comparison). | Dashes or markers to separate ordinary series |
 | A Figma Lymo component not listed here | The matching row in [Lymo components in 2.x](lymo-components.md) | Building it by hand from a Figma screenshot |
 | An AI result that failed to load | `AiInlineInsight.Error`, or `state="error"` with `onRetry` on `AiInsights`, `AiExplanationPopover`, and `AiDriverBreakdown` | A custom error line |
+
+## Figma parity: values you should not compensate for
+
+`@nesra/ui` 2.x matches these Figma Lymo values (Irfan's QA, November 2026). If a screen looks 1 or 2px off next to an older build, update the package instead of adding classes:
+
+- Figma strokes sit inside the frame, so components subtract the 1px border from their padding: `Badge` color and modern 20/22/24px, Pill color 18/20/22px, `BadgeGroup` 26/28px (modern 28/30px), `TrendChip` `variant="badge"` 20px (QA-011), `MobileTabBar` 72px, `Table.Toolbar` 58px (QA-027), and the `FileInput` `lg` drop zone 126px (QA-025).
+- `Tag` uses a 6px radius at every size (QA-012). `MultiSelect` pads `md` and `lg` 16px, while `Select` keeps 12px (QA-016).
+- `InformationBanner` `default` and `gray` use `border-primary` (QA-022). `AiRecommendationCard` `size="full"` pads 16px on `bg-primary` (QA-024). `FileInput` `lg` uses `border-primary` (QA-025). `Message.Author` uses `text-secondary` (QA-026).
 
 ## Feedback patterns
 
