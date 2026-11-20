@@ -40,6 +40,8 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
 | A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, `"688"`, `"720"`, or `"800"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
 | A filter button for a toolbar | `Filters.Trigger` with `count` | A `Button` restyled to 36px |
+| A table whose filter row opens and closes | `Table.FilterRow open` toggled by a `Table.ToolbarButton` with `aria-expanded` and `aria-controls`, and `layout="fixed"` with a `<colgroup>` so columns do not move | `hidden` toggling in `layout="auto"`, which shifts column widths |
+| A spreadsheet-style editable grid | Copy the Data grid example ([Data grid in 2.x](data-grid.md)) | Importing a `DataGrid` from `@nesra/ui`, which does not exist, or adding another grid library |
 | A search field with a shortcut hint | `InputGroup.Shortcut` inside a search `InputGroup` | A hand-built `kbd` |
 | Progress through a few labelled steps | `ProgressTextWithLine` from `@nesra/ui/indicator`, or `Stepper` for numbered steps | The removed `StepIndicator` |
 | A term with a definition on hover | `RichTooltip`, or `AiInlineInsight.Why` for an AI insight | The removed `TooltipTrigger` |
