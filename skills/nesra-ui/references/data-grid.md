@@ -8,8 +8,8 @@ ranges, fill, Excel-compatible copy and paste, undo, and CSV or xlsx export.
 
 `@nesra/ui` has no `DataGrid` export. `Table` stays presentational. The Data grid is example code in
 the design system repository at `apps/docs/src/examples/table/data-grid/`, documented on the Table
-docs page, section Data grid (`/components/table/#data-grid`, also `/components/table.md`). Copy it
-into the app and adapt it there.
+docs page, section Data grid (`/components/table/#data-grid`, also `/components/table.md`). A
+step-by-step build is at `/components/data-grid-tutorial/`. Copy it into the app and adapt it there.
 
 - Never write `import { DataGrid } from "@nesra/ui"` or a `@nesra/ui/...` subpath for it.
 - Do not add another grid library for this. If the app needs something the example does not do,
@@ -18,11 +18,12 @@ into the app and adapt it there.
 
 ## Copy and render
 
-1. Copy `data-grid.tsx`, `use-data-grid.ts`, `columns.ts`, and `export.ts` into the app, for example
+1. Copy `data-grid.tsx`, `use-data-grid.ts`, `columns.ts`, `export.ts`, and `motion.tsx` into the app, for example
    `src/components/data-grid/`. `data.ts` holds only the Renewals demo defaults: remove the
    `renewalColumns` and `makeRenewals` defaults at the top of `DataGridInner` in `data-grid.tsx`,
    then delete it.
-2. Dependencies are `@nesra/ui`, `lucide-react`, and React. The xlsx writer needs no package.
+2. Dependencies are `@nesra/ui` (it uses `Table`, `Popover`, `DatePicker`, and other parts),
+   `lucide-react`, and React. The xlsx writer needs no package.
 3. The app's Tailwind setup must scan the copied folder.
 
 ```tsx
@@ -67,9 +68,24 @@ Each `GridColumn` has `key`, `label`, `type`, and `width` (required), plus optio
   server response, loads as new data: the undo history and checked rows start over, and the view
   (sort, filters, columns, density) stays.
 - `onSelectionChange(ids)` reports checked rows. `title` names the grid and the export file.
-  `maxHeight` sets the scroll area height.
+  `maxHeight` sets the scroll area height. `defaultGroupBy` (array of column keys, outermost first)
+  sets the starting grouping, and Reset returns to it.
 - Save in `onRowsChange`, for example with `fetch`. To send only changes, compare the new rows with
   the previous ones by `id`.
+
+## Behavior to expect
+
+- Date cells: Alt+Down or the calendar button opens a calendar in a popover. Picking a day saves the
+  ISO value and ends the edit. Typing an ISO date still works. Esc closes the calendar and keeps
+  editing.
+- Nested group by: group by more than one column from the header menu. A "Grouped by" bar shows the
+  levels, moves a column out one level, or stops grouping. Each level shows a subtotal. The grid
+  becomes a `treegrid` with `aria-level` and `aria-expanded`. Paging counts data rows, and group
+  headers repeat on each page. xlsx export keeps the groups as an outline with `SUBTOTAL` formulas;
+  CSV has data rows only.
+- Motion: sorted rows slide to their new place, the active-cell and range outlines glide, and totals
+  and counts count up. Screen readers get only the final value. All motion stops when the user
+  prefers reduced motion. Keep `motion.tsx` with the other files.
 
 ## Filter syntax to give users
 
@@ -78,5 +94,5 @@ Text `olivia`, `=exact`, `!excluded`. Numbers `> 100`, `>= 5`, `!= 0`, `10..50`.
 
 ## Limits
 
-No row virtualization (pages of 25, 50, or 100 rows), no calendar popup in date cells, and one level
-of group by.
+No row virtualization (pages of 25, 50, or 100 rows), and no calendar in the filter row: use typed
+date filters there.
