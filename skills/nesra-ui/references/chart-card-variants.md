@@ -6,7 +6,7 @@ Source: Figma Lymo `Chart card` (`15788:9299`), `Chart widget/*`, `Area chart` (
 
 - A Figma `Chart widget/*` is `ChartCard` + one chart. There is no `ChartWidget` export.
 - A chart inside `ChartCard` drops its own surface, visible title/summary, and series legend. Still pass `title` and `summary` (screen reader name and description). Put the legend on the card: `<ChartCard legend={<ChartLegend items={...} />}>`.
-- Legend marker: `square` for bar and area, `line` for line. No legend for a single-series bar (each category has its own color).
+- Legend marker: `square` for bar and area, `line` for line. No card legend for a single-series bar: every bar is the series `color` and the header title names it.
 - Series colors: `series-1` … `series-8`, in series order. Same `key`/`label`/`color` in the chart `series` and in `ChartLegend` `items`.
 - Values inside the plot stay short (`formatValue={(v) => \`Rp ${v.toLocaleString("id-ID")}M\`}` on data in millions). The full amount goes in `ChartCard.Header` `value` (`Rp 146.000.000`).
 - Header as in Figma widgets: `icon` (`ChartLine` for line/area, `ChartColumn` for bar), `title`, `info`, `subtitle`, `tabs` (Tabs `minimal` `sm`: Day/Week/Month/Year), `actions` (UtilityButton tertiary `EllipsisVertical`), `value`, `change` (Badge `pill-color` success + `ArrowUp`), `comparison`. Then `ChartCard.Source sources={[...]} updated="..."`.
@@ -19,8 +19,8 @@ Source: Figma Lymo `Chart card` (`15788:9299`), `Chart widget/*`, `Area chart` (
 | Area (multi area) | Change over time · Area (`16350:45608`), Periods · Multi area | `AreaChart`, ≥1 series, no `stacked` |
 | Stacked area | Area chart Type=Stacked (`15798:11626`) | `AreaChart stacked` |
 | Stacked 100% area | Area chart Type=Stacked 100% (`15798:12183`) | `AreaChart stackedPercent` |
-| Vertical bar | Magnitude · Vertical bar (`15959:42204`) | `BarChart`, 1 series |
-| Horizontal bar | Magnitude · Horizontal bar (`15959:43300`) | `BarChart orientation="horizontal"`, 1 series |
+| Vertical bar | Magnitude · Vertical bar (`15959:42204`) | `BarChart`, 1 series, no `palette` (all bars `series-1`) |
+| Horizontal bar | Magnitude · Horizontal bar (`15959:43300`) | `BarChart orientation="horizontal"`, 1 series, no `palette` |
 | Grouped bar | Magnitude · Vertical grouped bar (`15959:42737`) | `BarChart`, ≥2 series, no `stacked` |
 | Horizontal grouped bar | Magnitude · Horizontal grouped bar (`15959:43735`) | `BarChart orientation="horizontal"`, ≥2 series |
 | Stacked bar | Periods · Stacked bar (`15960:57533`) | `BarChart stacked` (values ≥ 0) |
@@ -63,7 +63,40 @@ const legend = <ChartLegend items={series.map((s) => ({ ...s, marker: "square" a
 
 For the full card code, copy from the docs example of the same name.
 
+## Single-series bar color
+
+- Default (Figma): a single, unstacked `BarChart` series paints **every bar in the series `color`**. Figma Magnitude Vertical bar, Horizontal bar, and the base `Bar chart` Type=Single are all `series-1`, in Light and Dark. Do not pass `palette`.
+- `palette="series"` or `palette="heat"` is an **opt-in** for one color per category; the chart legend then lists each category. Figma has no single-series bar with a color per category, so use it only when the user asks for it.
+- `highlightIndex` keeps one bar at full color and dims the others to 35% in both modes.
+- Do not fake one color with `stacked` on one series.
+
+```tsx
+const gmv = [{ key: "gmv", label: "GMV", color: "series-1" }] satisfies ChartSeries[];
+// Figma default: every bar series-1
+<BarChart title="Daily GMV" summary="…" data={days} series={gmv} />
+// Opt in: one color per category, legend names each category
+<BarChart title="GMV by channel" summary="…" data={channels} series={gmv} palette="series" />
+```
+
+## Value axis (`valueDomain`)
+
+`LineChart`, `AreaChart`, `BarChart`, and `ComboChart` take `valueDomain: "nice" | "data" | [min, max]`.
+
+- `"nice"` (default, Figma): the axis rounds out to round ticks, four or five steps apart, whichever ends closer to the data (95 → 100 in 25s, 66 → 80, 380K → 400K, 13K → 16K, 203 → 250). Steps are 1, 2, 2.5, 4, or 5 × a power of ten. Zero stays on the axis, negatives round down, all zeros give 0–1, stacked charts round the stacked total. Leave it unset for Figma parity.
+- `"data"`: the axis ends at the data extent (with zero). This was the 1.x behavior.
+- `[min, max]`: a fixed axis (for example to compare several cards on one scale, or a 0–100 score). Ticks land on both ends in round steps when possible (`[0, 150]` → every 25). Values outside are clipped; `min` must be below `max`.
+- `stackedPercent` ignores it and stays 0–100%. `ComboChart` adds `lineValueDomain` for the right axis (defaults to `valueDomain` when that is `"nice"`/`"data"`, else `"nice"`). `LineChartPlot` keeps its own rounding and has no `valueDomain`.
+
+```tsx
+<BarChart title="…" summary="…" data={data} series={series} />                        // nice (default)
+<BarChart title="…" summary="…" data={data} series={series} valueDomain="data" />     // follow the data
+<AreaChart title="…" summary="…" data={data} series={series} valueDomain={[0, 150]} /> // fixed range
+<ComboChart title="…" summary="…" data={data} barSeries={bar} lineSeries={line} lineValueDomain="data" />
+```
+
+Other charts (`WaterfallChart`, `RangeBarChart`, `QuadrantChart`, `ScatterChart`, `LollipopChart`, …) do not take `valueDomain`.
+
 ## Not supported yet (do not promise; waiting on a decision)
 
-- Single-series bar in one color. Figma `Vertical bar` and `Horizontal bar` (Magnitude) paint every bar `series-1`. `BarChart` with one series always colors each category from `palette` (`series` or `heat`). Do not fake it with `stacked` on one series.
-- Rounded axis maximum. Figma's value axis ends at a round number (`Rp 100M`); the library's top tick follows the data maximum (`Rp 95M`).
+- Figma `_Chart bar` State=Muted is `bg-quaternary` (gray), and Periods Bar highlight shows gray bars with one `series-1` bar. `highlightIndex` dims the other bars to 35% of their own color instead. Figma Hover does not dim the other bars; the library dims them to 35% on hover.
+- Figma `_Chart bar` State=Active shows a value tag above the bar (`Rp 84M`); the library has no value tag on bars.

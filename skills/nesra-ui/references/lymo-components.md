@@ -106,6 +106,8 @@ Focus ring, per the audit in Chromium (Light and Dark):
 | A line compared with the previous period | A series with `dashed: true`. Every other Line Chart series is solid; never dash a series only to tell lines apart. |
 | Stacked or 100% stacked areas or bars | `stacked`, `stackedPercent` |
 | One highlighted bar | `BarChart highlightIndex` |
+| A single-series bar | `BarChart` with one series: every bar in the series `color`, as in Figma. Only set `palette="series"` or `"heat"` when the user asks for one color per category. |
+| A value axis that ends on a round tick, follows the data, or is fixed | `valueDomain` on `LineChart`, `AreaChart`, `BarChart`, `ComboChart`: `"nice"` (default, Figma), `"data"`, or `[min, max]`. `ComboChart` also takes `lineValueDomain`. See [Chart card variants](chart-card-variants.md#value-axis-valuedomain). |
 | Bars or an area with a line | `ComboChart type` `bar-line`, `stacked-bar-line` (several `barSeries`), `area-line`, `bar-area` |
 | Pie, donut, or two rings | `PieChart type` `pie`, `donut` (default), `nested-donut` (`innerValue`, `ringLabels`) |
 | Packed circles sized by value | `PackedBubbleChart` |
