@@ -96,7 +96,38 @@ const gmv = [{ key: "gmv", label: "GMV", color: "series-1" }] satisfies ChartSer
 
 Other charts (`WaterfallChart`, `RangeBarChart`, `QuadrantChart`, `ScatterChart`, `LollipopChart`, …) do not take `valueDomain`.
 
+## Other Figma charts (Pie, Scatter, Heatmap, Radial, Radar, Sankey, Waterfall, Funnel)
+
+Docs pages name each Figma node and show every supported type with copyable code; Storybook has Light and Dark stories for each, and Chart Widgets has the card version (Part to whole, Correlation, Flow, Magnitude · Radar) in Light and Dark.
+
+| Chart | Figma | Types and key props | Visual rules |
+| --- | --- | --- | --- |
+| `PieChart` | `Pie chart` `15805:16615` | `type` `"pie"`, `"donut"` (default), `"nested-donut"` (`innerValue`, `ringLabels`); `size`; `centerValue`, `centerLabel` | At most 5 slices, sorted largest first; they start at 12 o'clock clockwise. Diameter 136/216/296 in 198/278/358 plots. Donut hole 61%; nested rings 75–100% and 46–68.5%, both full color. Center: value on top (Semibold, by size), label under it (Text xs `text-tertiary`). In a card: `ChartLegend` square markers on the right. |
+| `ScatterChart` | `Scatter chart` `15889:27419` | Single (one series), Multi series (≤ 3 series), Bubble (`size` per point + `sizeLabel`). Packed bubble → `PackedBubbleChart`. | 8px dots with a 2px `bg-primary` ring; bubbles 72% opacity, 2px ring, ~22–40px. Horizontal dashed grid only. Set axis `domain` (`[0, 20_000_000]`) and short `formatValue` (`20M`). Card legend markers `dot`. |
+| `Heatmap` | `Heatmap` `15887:25863`, `_Chart heat cell` `15883:23967` | `type` `"matrix"`, `"calendar"`; `size`; `getLevel` (0–4) | `heat-1`…`4` and `heat-empty`; the scale reverses in Dark (light = high), as in Figma. Values only in tooltip and table. |
+| `RadialChart` | `Radial chart` `15835:23381` | `type` `"progress-ring"`, `"rings"` (1–3), `"gauge"`; `size`; `centerValue`, `caption`, `showValueTag`, `minLabel`/`maxLabel` | Gray track, round caps, dashed inner guide. Round percents to whole numbers with ``formatPercent={(r) => `${Math.round(r * 100)}%`}`` to match Figma (`72%`). |
+| `RadarChart` | `Radar chart` `15833:24173` | `variant` `"area"` (Single / Multi series by series count), `"dots"`; 5, 6, or 8 axes; `size` | Alternating ring bands, hollow vertex dots at the outer corners (Figma `Vertex`), 8px series dots. Figma axis names: Reach, Engagement, Conversion, AOV, Retention, Content, Reviews, Repeat buyers. |
+| `SankeyChart` | `Sankey diagram` `15899:27254` | `nodes`, `links`, `size` | Matches Figma; ribbons at `chart-flow-opacity`, 80% on hover. |
+| `WaterfallChart` | `Waterfall chart` `15891:27791` | `data` with `kind` `"total"`/`"change"`, `size`, `showStartLine` | Matches Figma; signed change labels. |
+| `FunnelChart` | `Funnel chart` `15894:27449` | `type` `"bars"`, `"columns"` (`highlightedStageId`), `"flow"`; `size` | Matches Figma; pass `id-ID` formatters for `48,2K` and `65,6%`. |
+
+```tsx
+<PieChart title="GMV share by channel" summary="…" data={top5} size="md" centerValue="Rp 84M" centerLabel="Total GMV" />
+<ScatterChart title="Ad spend vs GMV" summary="…" series={[tiktok]} data={campaigns}
+  xAxis={{ label: "Ad spend", domain: [0, 20_000_000], formatValue: (v) => `${v / 1e6}M` }}
+  yAxis={{ label: "GMV", domain: [0, 80_000_000], formatValue: (v) => `${v / 1e6}M` }} />
+<RadialChart title="ROAS" summary="…" type="gauge" max={6} caption="of 6x target" minLabel="0x" maxLabel="6x"
+  showValueTag formatPercent={(r) => `${Math.round(r * 100)}%`} data={[{ id: "roas", label: "ROAS", value: 4.3 }]} />
+```
+
+Number format: Figma writes Indonesian numbers (`48,2K`, `65,6%`, `Rp 84M`). Chart defaults are `en-US`; pass `id-ID` formatters (`formatValue`, `formatCompactValue`, `formatPercent`).
+
 ## Not supported yet (do not promise; waiting on a decision)
 
 - Figma `_Chart bar` State=Muted is `bg-quaternary` (gray), and Periods Bar highlight shows gray bars with one `series-1` bar. `highlightIndex` dims the other bars to 35% of their own color instead. Figma Hover does not dim the other bars; the library dims them to 35% on hover.
 - Figma `_Chart bar` State=Active shows a value tag above the bar (`Rp 84M`); the library has no value tag on bars.
+- `ScatterChart` has no `size` prop (Figma sm/md/lg 198/278/358); the plot is 320px.
+- `ScatterChart` shows the axis names under and beside the plot; Figma shows none.
+- `RadialChart type="gauge"` value tag shows the percent; Figma's gauge tag shows the value (`4,3x`).
+- `PieChart` has no Figma `Labels` option (percent outside each slice).
+- Chart number formats default to `en-US`, not Figma's Indonesian format.
