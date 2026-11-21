@@ -116,15 +116,17 @@ Focus ring, per the audit in Chromium (Light and Dark):
 
 | Need | Use |
 | --- | --- |
-| A chart at a Figma height | `size` `sm` (198px), `md` (278px), `lg` (358px) on `LineChart`, `AreaChart`, `BarChart`, `ComboChart`, `PieChart`. Without `size` the plot is 320px. |
+| A chart at a Figma height | `size` `sm` (198px), `md` (278px), `lg` (358px) on `LineChart`, `AreaChart`, `BarChart`, `ComboChart`, `PieChart` (without `size` the plot is 320px), and on `ScatterChart`, `RadarChart`, `RadialChart`, `Heatmap`, `WaterfallChart`, `FunnelChart`, `SankeyChart`, `PackedBubbleChart` (default `md`). |
 | A line compared with the previous period | A series with `dashed: true`. Every other Line Chart series is solid; never dash a series only to tell lines apart. |
 | Stacked or 100% stacked areas or bars | `stacked`, `stackedPercent` |
 | One highlighted bar | `BarChart highlightIndex` |
 | A single-series bar | `BarChart` with one series: every bar in the series `color`, as in Figma. Only set `palette="series"` or `"heat"` when the user asks for one color per category. |
 | A value axis that ends on a round tick, follows the data, or is fixed | `valueDomain` on `LineChart`, `AreaChart`, `BarChart`, `ComboChart`: `"nice"` (default, Figma), `"data"`, or `[min, max]`. `ComboChart` also takes `lineValueDomain`. See [Chart card variants](chart-card-variants.md#value-axis-valuedomain). |
 | Bars or an area with a line | `ComboChart type` `bar-line`, `stacked-bar-line` (several `barSeries`), `area-line`, `bar-area` |
-| Pie, donut, or two rings | `PieChart type` `pie`, `donut` (default), `nested-donut` (`innerValue`, `ringLabels`). At most 5 slices, largest first; `centerValue` on top, `centerLabel` under it. |
-| Scatter or bubble points | `ScatterChart` (Single, Multi series ≤ 3, Bubble with `size` + `sizeLabel`); set axis `domain` and short `formatValue` like Figma. |
+| Pie, donut, or two rings | `PieChart type` `pie`, `donut` (default), `nested-donut` (`innerValue`, `ringLabels`). At most 5 slices, largest first; `centerValue` on top, `centerLabel` under it; `showLabels` for Figma Labels (share outside each slice). |
+| Scatter or bubble points | `ScatterChart` (Single, Multi series ≤ 3, Bubble with point `size` + `sizeLabel`); chart `size` `sm`/`md` (default)/`lg`; axis names hidden unless `showAxisLabels`; set axis `domain` and short `formatValue` like Figma. |
+| Chart numbers in Indonesian or another locale | Default `id-ID` (`1.250.000`, `65,6%`, `48,2K`); `NesraI18nProvider locale="en-US"` for English. Format props still win. |
+| Which docs page and story has a Figma chart | See [Where each Figma chart lives](chart-card-variants.md#where-each-figma-chart-lives). |
 | Packed circles sized by value | `PackedBubbleChart` |
 | A small trend without axes | `Sparkline` (`trend` `positive`, `negative`, `neutral`; `type` `line`, `area`, `bar`) |
 | Funnel, radar, radial, heatmap, waterfall, Sankey | `FunnelChart`, `RadarChart`, `RadialChart`, `Heatmap`, `WaterfallChart`, `SankeyChart` |
