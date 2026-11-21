@@ -51,6 +51,8 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Page header styles | `PageHeader variant` (9 Figma styles) with `PageHeader.Banner`, `.Avatar`, `.Search`, `.Count` |
 | A date and time field | `DateTimeInput` |
 | A date with a Today button, or a date with time slots | `DatePicker` (single) and `availableTimes` with `onTimeChange` |
+| Date Picker text format | Shown as `DD/MM/YYYY` (`21/11/2026`) for every `locale`: single input, placeholder, Selected date box, and range inputs. `locale` only names months and weekdays. Values stay ISO `YYYY-MM-DD`: `value`, `defaultValue`, `onValueChange`, `minDate`, `maxDate`, `isDateDisabled`, range `{ start, end }`, and form fields `name`, `name[start]`, `name[end]`. Never pass `DD/MM/YYYY` to a prop. DS exports no formatter, so format the value yourself when you show it on a page. The single input accepts typed `DD/MM/YYYY` (one-digit day and month are fine, `/` is inserted for you, a pasted ISO date works). Range inputs order day, month, year. Tests that type ISO into the input must type `DD/MM/YYYY` instead. |
+| Date Picker width | The single field needs no width wrapper: it is 328px, or 528px with `availableTimes`, and narrows in a smaller container (below 528px the times become a Select). A bare calendar in a `Popover` needs only the Popover's own padding, so do not force a width on the Popover. |
 | Range presets | `DatePicker mode="range"` presets are the nine Figma presets. All time reports an empty `start` (or `minDate`). |
 | Steps with icons or numbers | `ProgressSteps` (`type` `icon`, `number`, `featured-icon`) |
 | Section headings and footers | `SectionHeader`, `SectionLabel`, `SectionFooter` |
