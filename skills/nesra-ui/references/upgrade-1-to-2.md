@@ -31,6 +31,7 @@ Check these first, because TypeScript catches only some of them:
 - Run the project's typecheck, lint, tests, and build.
 - Rerun the search commands. Every remaining hit needs a 2.0 name or a recorded decision.
 - Review key screens in Light and Dark: lists, forms with errors, dialogs, toasts, tables with selection, and charts.
+- Charts changed two defaults: a single-series `BarChart` is one color (1.x colored each category; restore with `palette="series"`), and value axes round to round ticks (restore the data extent with `valueDomain="data"`). Keep the new defaults unless the product needs the old look.
 - Check keyboard behavior: Tab order, visible focus rings, arrow keys in Tabs and ButtonGroup, focus trapping and return in Dialog and Sheet, and Escape.
 
 ## When something has no 2.0 counterpart
