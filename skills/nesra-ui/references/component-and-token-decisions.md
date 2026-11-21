@@ -39,6 +39,7 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 | Loading placeholder for content that AI is generating | `Skeleton tone="ai"` (the spectrum fill) | The removed `tone="teal"` or a custom gradient |
 | An avatar without an image | `Avatar` with `initials` or the default icon. Its fallback is one neutral gray in 2.x. The `border-secondary` line is drawn inside the circle (0.5px `xs`, 0.75px `sm`, 1px from `md`); a photo fills the circle with a faint 0.5px edge. | Picking a color per person, or adding a `border` or `ring` class to `Avatar` |
 | Table row height | The default, 32px (Figma Compact). For 40px rows wrap the table in `data-nesra-table-density="standard"`; `density="comfortable"` is 48px. | Custom row heights |
+| A dropdown menu width | The `DropdownMenu.Content` default, 240px, for Figma Button advanced, Icon advanced, Search, Account button, avatar, and card sm/md menus and the Table menus. Otherwise pass the Figma width in `className`: `w-54` (216px) for Button simple, Icon simple, and Integrations; `w-50` (200px) for Account card xs and Submenu; `w-40` (160px) for Button link; `w-62` (248px) for Account breadcrumb. `Sidebar.PlatformMenu` already sets 224px. | Another width class, or leaving 240px on a Figma 216px menu |
 | A dialog width | `Dialog.Content` `size` `"400"` (default), `"480"`, `"544"`, `"560"`, `"640"`, `"688"`, `"720"`, or `"800"`, the Figma Modal widths | `sm` or `md`, which were removed, or a custom width class when a size fits |
 | A filter button for a toolbar | `Filters.Trigger` with `count` | A `Button` restyled to 36px |
 | A table whose filter row opens and closes | `Table.FilterRow open` toggled by a `Table.ToolbarButton` with `aria-expanded` and `aria-controls`, and `layout="fixed"` with a `<colgroup>` so columns do not move | `hidden` toggling in `layout="auto"`, which shifts column widths |
@@ -59,6 +60,7 @@ Each row names the 2.x choice. Confirm the import and props in the installed pac
 
 - Figma strokes sit inside the frame, so components subtract the 1px border from their padding: `Badge` color and modern 20/22/24px, Pill color 18/20/22px, `BadgeGroup` 26/28px (modern 28/30px), `TrendChip` `variant="badge"` 20px (QA-011), `MobileTabBar` 72px, `Table.Toolbar` 58px (QA-027), and the `FileInput` `lg` drop zone 126px (QA-025).
 - `Tag` uses a 6px radius at every size (QA-012). `MultiSelect` pads `md` and `lg` 16px, while `Select` keeps 12px (QA-016).
+- `Calendar` at 640px and wider uses a 20px radius and `bg-primary` for the panel, header, column headers, and cells (#0A0A0A in Dark). The compact layout below 640px keeps 12px and `bg-primary_alt` (QA-023).
 - `InformationBanner` `default` and `gray` use `border-primary` (QA-022). `AiRecommendationCard` `size="full"` pads 16px on `bg-primary` (QA-024). `FileInput` `lg` uses `border-primary` (QA-025). `Message.Author` uses `text-secondary` (QA-026).
 
 ## Feedback patterns
