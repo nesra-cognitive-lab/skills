@@ -61,7 +61,7 @@ Focus ring, per the audit in Chromium (Light and Dark):
 - Figma Status icon (`15095:2101`) has five Types, and each is a `status` value: `offline`, `online`, `avatar` (node `15095:2092`, a second image from `statusSrc`), `verified`, and `count`. There is no other status.
 - Online and Offline: a dot 4px smaller than the Status icon frame, so 6, 8, 10, 12, 14, and 16px for `xs`–`2xl`. Its 1.5px `bg-primary` ring is inside the dot, and the dot sits flush with the avatar's bottom right edge.
 - Verified: the blue `badge-check` fills the Status icon frame and overhangs the avatar by 2px.
-- `status="count"` and `status="avatar"` keep their own badge sizes. Their ring sits outside the frame, so the badge is about 3px larger than Figma. That is known; do not resize it with classes.
+- `status="avatar"` fills the Status icon frame (10, 12, 14, 16, 18, 20px for `xs`–`2xl`) and `status="count"` sits 1px inside it (8–18px). Both draw the 1.5px `bg-primary` ring inside the circle, and the frame overhangs the avatar by 2px, as in Figma. Count digits are 10px from `md`, smaller at `sm` and `xs`. The badge is absolutely positioned and never moves layout. Do not resize it with classes.
 - Border=True: the code adds an outer `bg-primary` ring (1.5px at `xs` and `sm`, 2px from `md`). Figma draws the border inside the frame (0.5–1px `border-secondary_alt`, 1–2px padding, `shadow-xs`) and keeps the size. That is known; use `border` as it is.
 - Figma `_Avatar add button` (`15095:2337`) is the add button inside `Avatar.Group`: pass `onAdd` and `addLabel`. There is no standalone export.
   - Size follows the group `size`: 24, 32, or 40px, with a 16, 16, or 20px plus.
@@ -69,7 +69,8 @@ Focus ring, per the audit in Chromium (Light and Dark):
   - Plus: `icon-tertiary`.
   - Hover: `bg-primary_hover`, an `icon-quaternary_hover` plus, and a Tooltip with `addLabel` (Figma "Add user") and the arrow above the button.
   - Focus: `focus-ring`.
-  - Disabled: 50% opacity in Figma, but `Avatar.Group` has no prop for it yet.
+  - Disabled: `addDisabled` (default `false`, only with `onAdd`). The button is natively disabled at 50% opacity, with no hover and no Tooltip. Use it when the person cannot add members, and say why nearby.
+  - There is no standalone add button export; keep it inside `Avatar.Group`.
 - `onAction` with `actionLabel` is a different thing: an action on one avatar with a small plus badge. Use the group add button to add a member.
 - Figma `_Avatar image` (`15096:2377`) is a sheet of sample photos, not a component. Pass any photo URL to `src`. Its Source links are empty in Figma, so do not copy those photos into an app.
 - The Avatar docs show sizes against photo, icon, and initials; Group sizes; Add button (xs, sm, md × Default, Hover, Focus); Status icon types; Label group; Profile photo; and Light and Dark. Check a screen against those previews.
