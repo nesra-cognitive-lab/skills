@@ -40,26 +40,39 @@ Figma `Select` (`15081:4239`) has six Types. Each maps to one component. The Sel
 | Default, Icon leading | `Select` with `items`. For an icon, pass `leading` to `Select` as a function of the value (`(value) => icons[value]`) and `leading` to each `Select.Option`. |
 | Avatar leading, Dot leading | The same `leading` on `Select` and `Select.Option`, with an `Avatar` or a `Dot`. The trigger shows the selected option's avatar or dot only when `Select` `leading` is a function of the value. |
 | Supporting text? | `supportingText` on each `Select.Option`, and `items={{ id: { label, supportingText } }}` so the trigger shows it too. Do not build label and supporting text spans by hand. |
-| Search | `Combobox` with `Combobox.TriggerInput` `leading={<Search />}`, `shortcut="⌘K"`, and `showTrigger={false}`, then `Combobox.Content` with `Combobox.Empty` and `Combobox.List`. Items take `supportingText`. `⌘K` is display only: bind the key in the app and focus the input. Clear (×) replaces the Shortcut once a value is selected. A search box that only filters a page, such as the Filters bar or Page header search, stays an `InputGroup` (see the decisions table). Use `Combobox` when the field picks a value from a list. |
-| Tags | `MultiSelect valueDisplay="tags"` (`maxTags`, then `+N`). It differs from Figma today: the raised Select trigger without a search icon, Tags without ×, search inside the menu, checkbox items, and Reset and Select all. Do not rebuild the Figma Tags field by hand; report the gap. |
+| Search | `Combobox` with `label`, `help` (the Figma Help icon), and `Combobox.TriggerInput` `leading={<Search />}`, `shortcut="⌘K"`, and `showTrigger={false}`, then `Combobox.Content` with `Combobox.Empty` and `Combobox.List`. Items take `supportingText`. `⌘K` is display only: bind the key in the app and focus the input. Clear (×) replaces the Shortcut once a value is selected. A search box that only filters a page, such as the Filters bar or Page header search, stays an `InputGroup` (see the decisions table). Use `Combobox` when the field picks a value from a list. |
+| Tags | `MultiSelect valueDisplay="tags"` (`maxTags`, then `+N`), with `help` for the Help icon. It differs from Figma today: the raised Select trigger without a search icon, Tags without ×, search inside the menu, checkbox items, and Reset and Select all. Do not rebuild the Figma Tags field by hand; report the gap. |
 
-Known Search gaps: the input shows and searches the label only (Figma also shows the supporting text), padding X is 12/16/16px at sm/md/lg (Figma 12px), and `Combobox` and `MultiSelect` have no `help` prop. Use them as they are.
+`Combobox` and `MultiSelect` take `help` and `optional` like `Select`, so the label row matches Figma (Label, `*`, Help icon). With `leading`, `Combobox.TriggerInput` pads 12px on both sides at every Size, as in Figma Search. Without `leading` it keeps the field padding (12/16/16px). Do not add padding classes.
+
+Not built yet, so use the components as they are and report the gap: the Figma Tags field (× on each Tag, typing in the field, Backspace removes the last Tag) and the selected item's supporting text inside a filled Search input (the input shows and searches the label only).
+
+In the Select docs state matrices, the Open cell is an illustration. Search and Tags render their menu in an `inert` cell, and every Open cell opens once it is on screen. The `inert`, `container`, `defaultOpen`, `modal={false}`, and `data-preview-state` in that code are for the docs only, so leave them out of an app.
 
 Focus ring, per the audit in Chromium (Light and Dark):
 
 - `Select`, `Combobox.TriggerValue`, and the `MultiSelect` trigger use `focus-visible`. Tab shows the ring, and so does Escape after a keyboard open. A mouse click shows no ring. That is expected, not a bug.
-- `Combobox.TriggerInput` uses `focus-within`. Tab and a click both show the ring with `border-primary_hover`, and it stays while the menu is open. Figma Search Open has no ring.
+- `Combobox.TriggerInput` uses `focus-within`. Tab and a click both show the ring with `border-primary_hover`. While the menu is open the ring hides and `border-primary_hover` stays (Figma Search Open). After Escape the ring returns.
 - Open: the `Select` and `MultiSelect` trigger turn `bg-secondary_hover`, and focus moves into the menu. Error uses `focus-ring-error`.
 - Do not change how a Nesra field takes focus or add a ring class to force the Focused look. To show a static Focused state in a page or story, focus the field for real.
 
 ## Avatar status and add button
 
+- Figma Status icon (`15095:2101`) has five Types, and each is a `status` value: `offline`, `online`, `avatar` (node `15095:2092`, a second image from `statusSrc`), `verified`, and `count`. There is no other status.
 - Online and Offline: a dot 4px smaller than the Status icon frame, so 6, 8, 10, 12, 14, and 16px for `xs`–`2xl`. Its 1.5px `bg-primary` ring is inside the dot, and the dot sits flush with the avatar's bottom right edge.
 - Verified: the blue `badge-check` fills the Status icon frame and overhangs the avatar by 2px.
-- `status="count"` and `status="avatar"` keep their own badge sizes.
-- The group add button (`Avatar.Group` add action) is a dashed `border-primary` circle with a plus. The dashed border is correct.
-- The Avatar docs show sizes against photo, icon, and initials; Group sizes; Status icon types; Label group; Profile photo; and Light and Dark. Check a screen against those previews.
-
+- `status="count"` and `status="avatar"` keep their own badge sizes. Their ring sits outside the frame, so the badge is about 3px larger than Figma. That is known; do not resize it with classes.
+- Border=True: the code adds an outer `bg-primary` ring (1.5px at `xs` and `sm`, 2px from `md`). Figma draws the border inside the frame (0.5–1px `border-secondary_alt`, 1–2px padding, `shadow-xs`) and keeps the size. That is known; use `border` as it is.
+- Figma `_Avatar add button` (`15095:2337`) is the add button inside `Avatar.Group`: pass `onAdd` and `addLabel`. There is no standalone export.
+  - Size follows the group `size`: 24, 32, or 40px, with a 16, 16, or 20px plus.
+  - `bg-primary` circle with a 1px `border-primary` outline in 1px dashes 3px apart. The dashed (dotted) outline is correct.
+  - Plus: `icon-tertiary`.
+  - Hover: `bg-primary_hover`, an `icon-quaternary_hover` plus, and a Tooltip with `addLabel` (Figma "Add user") and the arrow above the button.
+  - Focus: `focus-ring`.
+  - Disabled: 50% opacity in Figma, but `Avatar.Group` has no prop for it yet.
+- `onAction` with `actionLabel` is a different thing: an action on one avatar with a small plus badge. Use the group add button to add a member.
+- Figma `_Avatar image` (`15096:2377`) is a sheet of sample photos, not a component. Pass any photo URL to `src`. Its Source links are empty in Figma, so do not copy those photos into an app.
+- The Avatar docs show sizes against photo, icon, and initials; Group sizes; Add button (xs, sm, md × Default, Hover, Focus); Status icon types; Label group; Profile photo; and Light and Dark. Check a screen against those previews.
 ## Application components
 
 | Need | Use |
