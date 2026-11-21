@@ -30,6 +30,36 @@ Import from the subpath named in the docs page when one exists, such as `@nesra/
 | Brand, payment, integration, and store marks | `SocialIcon`, `PaymentMethodIcon`, `IntegrationIcon`, `SocialButton`, `SocialButtonGroup`, `MobileAppStoreBadge` |
 | Decorative backgrounds and illustrations | `BackgroundPattern`, `BackgroundPatternDecorative`, `BackgroundOverlay`, `SuperGraphicLiftedLines`, `SuperGraphicPixelInsight`, `SuperGraphicFacet`, `Illustration`, `LymoMascot`, `LymoLoader`, `LymoProgressBar`, `LymoLoadingStatus`, `EmptyState.Illustration` |
 
+
+## Select types and states
+
+Figma `Select` (`15081:4239`) has six Types. Each maps to one component. The Select docs page shows every Type in Placeholder, Default, Focused, Open, Disabled, and Error, with code.
+
+| Figma Select Type | Use |
+| --- | --- |
+| Default, Icon leading | `Select` with `items`. For an icon, pass `leading` to `Select` as a function of the value (`(value) => icons[value]`) and `leading` to each `Select.Option`. |
+| Avatar leading, Dot leading | The same `leading` on `Select` and `Select.Option`, with an `Avatar` or a `Dot`. The trigger shows the selected option's avatar or dot only when `Select` `leading` is a function of the value. |
+| Supporting text? | `supportingText` on each `Select.Option`, and `items={{ id: { label, supportingText } }}` so the trigger shows it too. Do not build label and supporting text spans by hand. |
+| Search | `Combobox` with `Combobox.TriggerInput` `leading={<Search />}`, `shortcut="⌘K"`, and `showTrigger={false}`, then `Combobox.Content` with `Combobox.Empty` and `Combobox.List`. Items take `supportingText`. `⌘K` is display only: bind the key in the app and focus the input. Clear (×) replaces the Shortcut once a value is selected. A search box that only filters a page, such as the Filters bar or Page header search, stays an `InputGroup` (see the decisions table). Use `Combobox` when the field picks a value from a list. |
+| Tags | `MultiSelect valueDisplay="tags"` (`maxTags`, then `+N`). It differs from Figma today: the raised Select trigger without a search icon, Tags without ×, search inside the menu, checkbox items, and Reset and Select all. Do not rebuild the Figma Tags field by hand; report the gap. |
+
+Known Search gaps: the input shows and searches the label only (Figma also shows the supporting text), padding X is 12/16/16px at sm/md/lg (Figma 12px), and `Combobox` and `MultiSelect` have no `help` prop. Use them as they are.
+
+Focus ring, per the audit in Chromium (Light and Dark):
+
+- `Select`, `Combobox.TriggerValue`, and the `MultiSelect` trigger use `focus-visible`. Tab shows the ring, and so does Escape after a keyboard open. A mouse click shows no ring. That is expected, not a bug.
+- `Combobox.TriggerInput` uses `focus-within`. Tab and a click both show the ring with `border-primary_hover`, and it stays while the menu is open. Figma Search Open has no ring.
+- Open: the `Select` and `MultiSelect` trigger turn `bg-secondary_hover`, and focus moves into the menu. Error uses `focus-ring-error`.
+- Do not change how a Nesra field takes focus or add a ring class to force the Focused look. To show a static Focused state in a page or story, focus the field for real.
+
+## Avatar status and add button
+
+- Online and Offline: a dot 4px smaller than the Status icon frame, so 6, 8, 10, 12, 14, and 16px for `xs`–`2xl`. Its 1.5px `bg-primary` ring is inside the dot, and the dot sits flush with the avatar's bottom right edge.
+- Verified: the blue `badge-check` fills the Status icon frame and overhangs the avatar by 2px.
+- `status="count"` and `status="avatar"` keep their own badge sizes.
+- The group add button (`Avatar.Group` add action) is a dashed `border-primary` circle with a plus. The dashed border is correct.
+- The Avatar docs show sizes against photo, icon, and initials; Group sizes; Status icon types; Label group; Profile photo; and Light and Dark. Check a screen against those previews.
+
 ## Application components
 
 | Need | Use |
