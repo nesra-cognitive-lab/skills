@@ -89,8 +89,9 @@ Focus ring, per the audit in Chromium (Light and Dark):
 | An editable spreadsheet grid (Figma Table with toolbar, filter row, totals, status bar) | The Data grid example, copied into the app. It is not an export: see [Data grid in 2.x](data-grid.md) |
 | Pages, dots, or a carousel | `Pagination` (`type`, `breakpoint`), `Pagination.DotGroup`, `Carousel` |
 | A tree list | `TreeView` (not `TableTree`, which is a table) |
-| Account, search, or integrations in a dropdown | `DropdownMenu.AccountTrigger`, `DropdownMenu.AccountItem`, `DropdownMenu.Search`, `DropdownMenu.Footer` |
-| One choice, or checkboxes, in a dropdown | `DropdownMenu.RadioGroup` with `DropdownMenu.RadioItem`; `DropdownMenu.CheckboxItem` with `indicator="checkbox"` and `indeterminate` for a Select all |
+| A Figma Dropdown menu type (Button simple or advanced, Button link, Icon, Search, Integrations, Account button, avatar, card xs/sm/md, breadcrumb) | `DropdownMenu.Trigger variant` `button`, `link`, or `icon`, or `DropdownMenu.AccountTrigger` (`status` for the avatar dot), with the Figma width in `Content className`. Every type with its parts and code, and when Sign out is an item or a footer button: [Dropdown menu](dropdown-menu.md) |
+| Account, search, or integrations in a dropdown | `DropdownMenu.AccountTrigger`, `DropdownMenu.AccountItem`, `DropdownMenu.Search`, `DropdownMenu.Footer` with `DropdownMenu.FooterButton` |
+| One choice, or checkboxes, in a dropdown | `DropdownMenu.RadioGroup` with `DropdownMenu.RadioItem` (`indicator="dot"` for the Figma green dot); `DropdownMenu.CheckboxItem` with `indicator="checkbox"` and `indeterminate` for a Select all; `DropdownMenu.SubTrigger checked` for a checked row that opens a submenu |
 | Notification types | `Toast` `type` `avatar`, `image`, `progress`, `ai` |
 | Page header styles | `PageHeader variant` (9 Figma styles) with `PageHeader.Banner`, `.Avatar`, `.Search`, `.Count` |
 | A date and time field | `DateTimeInput` |
