@@ -40,7 +40,7 @@ The docs sidebar (group **Charts**) and Storybook (`Components/Charts/<group>/<c
 | --- | --- | --- | --- |
 | Change over time, Periods, Magnitude, Part to whole, Correlation, Flow | `components/chart-card#chart-widgets`, `#chart-variants` | `Components/Charts/Chart widgets/Chart Widgets` | `ChartCard` + one chart |
 | Patterns | `components/pattern-charts` | `…/Chart widgets/Proportion Bar Chart`, `Timeline Band Chart`, `Range Bar Chart`, `Lollipop Chart` | `ProportionBarChart`, `TimelineBandChart`, `RangeBarChart`, `LollipopChart` |
-| Correlation · Quadrant (Product Potential Map) | `components/pattern-charts#product-potential-map` | `…/Chart widgets/Chart Widgets/Correlation · Quadrant` (Light, Dark, Hover), `…/Chart widgets/Quadrant Chart` | `ChartCard` + `QuadrantChart` |
+| Correlation · Quadrant (Product Potential Map) | `components/pattern-charts#product-potential-map` | `…/Chart widgets/Quadrant Chart` › `Figma`, `Figma · Hover`, `Figma · Dark`, `Figma · Hover · Dark` (same card: Chart Widgets › `Correlation · Quadrant`) | `ChartCard` + `QuadrantChart` |
 
 ## Rules
 
@@ -164,7 +164,7 @@ Number format: every chart formats numbers in the `NesraI18nProvider` locale, `i
 
 ## Product Potential Map (Quadrant)
 
-Figma `Chart widget/Correlation`, Chart=Quadrant (Default `16851:45965`, Hover `16855:46210`, Dark preview). Docs: Pattern Charts › Quadrant › Product Potential Map (full code, anatomy). Storybook: Chart Widgets › `Correlation · Quadrant` (+ `· Hover`, `· Dark`).
+Figma `Chart widget/Correlation`, Chart=Quadrant (Default `16851:45965`, Hover `16855:46210`, Dark preview). Docs: Pattern Charts › Quadrant › Product Potential Map (full code, anatomy). Storybook: Quadrant Chart › `Figma` (+ `· Hover`, `· Dark`, `· Hover · Dark`) at the Figma size, 1099px card and 724px plot; `Default` and `RangeSliders` are the plot only.
 
 ```tsx
 <ChartCard>
@@ -194,6 +194,7 @@ Rules:
 - Pass the zone `description`s with short axis names (`Low clicks · High CTOR`); the default uses the full axis label (`Low Product clicks · …`).
 - The dashed lines are catalog averages in Figma (`36.111`, `1,52%`), not the mean of the 20 points: pass `average` and `averageLabel`.
 - Bubbles: `image` per point (product photo; use your own images), `size` = GMV (24–56px by area), `label` = full product name. Names show under the bubble, 104px wide, two lines, cut with `…` automatically.
+- Bubble names have the Figma outline built in: a 3px stroke outside the letters in `bg-primary` (white in Light, `#0A0A0A` in Dark), no shadow or background box. Do not add a `text-shadow` or a background behind names.
 - Built-in layout per Figma: plot 724px tall, legend over the Y ticks, right zone labels 16px from the edge, tooltip 12px from the bubble with a Dot marker, sliders named `{axis} minimum` / `{axis} maximum`.
 - The Figma card is 1099px wide; in narrow containers the plot squeezes and labels overlap. Give it the full width (the docs preview scrolls sideways).
 
