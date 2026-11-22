@@ -12,6 +12,13 @@ the design system repository at `apps/docs/src/examples/table/data-grid/`, docum
 docs page, section Data grid (`/components/table/#data-grid`, also `/components/table.md`). A
 step-by-step build is at `/components/data-grid-tutorial/`. Copy it into the app and adapt it there.
 
+The tutorial order: steps 2 to 9 build the editable Invoices grid (columns, types, editing,
+search and filters, pinning, ranges and undo, totals and grouping, export). Step 10 makes it
+view-only with row click (`mode="view"`, `onRowClick`). Step 11 loads rows from a server with the
+pagination (`onLoadMore`, `loadMoreOn="pagination"`, `hasMore`, `totalRows`, `totals`). Step 12 is
+the finished editable grid (Storybook `Tutorial result`). Point a user to the step that matches
+the screen they build.
+
 - Never write `import { DataGrid } from "@nesra/ui"` or a `@nesra/ui/...` subpath for it.
 - Do not add another grid library for this. If the app needs something the example does not do,
   change the copied files.
@@ -159,10 +166,17 @@ Accessibility rules the grid already follows (keep them when you change the copy
 
 ## Load more
 
-`onLoadMore` replaces the pagination with Figma Table footer `Type=Load on scroll` (Figma
-`Example=Data grid filtered`, node 15679:18399): the next block loads automatically when the end of
-the scroll area comes near. There is no Load more button in Figma. Keyboard users load more with
-Down, Page Down, or Cmd/Ctrl+End on the last loaded row.
+`onLoadMore` loads the next block from the server. `loadMoreOn` picks where it runs:
+
+- `"scroll"` (default): `onLoadMore` replaces the pagination with Figma Table footer
+  `Type=Load on scroll` (Figma `Example=Data grid filtered`, node 15679:18399): the next block
+  loads automatically when the end of the scroll area comes near. There is no Load more button in
+  Figma. Keyboard users load more with Down, Page Down, or Cmd/Ctrl+End on the last loaded row.
+- `"pagination"`: the Figma `Type=Pagination` footer stays (node 15573:8552). The right-side
+  buttons load: see [Load more from the pagination](#load-more-from-the-pagination).
+
+Use `scroll` for feeds and long lists people skim. Use `pagination` when people page through
+records, jump to a page, or need "Page 2 of 8".
 
 | Prop | Type | Default | Meaning |
 | --- | --- | --- | --- |
@@ -171,6 +185,7 @@ Down, Page Down, or Cmd/Ctrl+End on the last loaded row.
 | `loadingMore` | `boolean` | pending state of the returned promise | Shows the spinner and "Loading more rows". |
 | `totalRows` | `number` | none | Server count: "50 of 10,000 rows loaded" and "24 of 128 rows". |
 | `totals` | `Partial<Record<string, number \| null>>` | none | Server totals by column key (Figma totals cover every row that passes the filters, not only loaded rows). |
+| `loadMoreOn` | `"scroll" \| "pagination"` | `"scroll"` | Load near the end of one scrolling list, or from the pagination buttons. |
 
 ```tsx
 import { useEffect, useState } from "react";
@@ -223,6 +238,48 @@ export function Projects() {
   politely. The spinner itself is hidden from screen readers.
 - A failed promise ends the loading state. Show your own error; scrolling to the end tries again.
 
+### Load more from the pagination
+
+With `loadMoreOn="pagination"`, Next (›), Last (»), or a page number past the loaded rows calls
+`onLoadMore` until that page is full (or `hasMore` is `false`), then opens the page. Pages already
+loaded open at once. Figma draws no loading state for the Pagination footer, so the grid adds one
+next to Rows per page.
+
+```tsx
+<DataGrid
+  title="Invoices"
+  columns={columns}
+  rows={rows}
+  mode="view"
+  loadMoreOn="pagination"
+  onLoadMore={async () => {
+    const page = await fetchInvoices(rows.length); // fetch(`/api/invoices?offset=...&limit=25`)
+    setRows((current) => [...current, ...page.rows]); // append, never replace
+  }}
+  hasMore={rows.length < total} // false: Next and Last disabled on the last page
+  totalRows={total} // page count: "Page 1 of 8"
+  totals={{ amount: serverAmountSum }} // optional server totals
+/>
+```
+
+- **Page count:** with `totalRows` and no filter or search, every server page ("of 8" for 200 rows
+  at 25 per page). Otherwise the loaded pages, plus one while `hasMore` is `true`.
+- **Loading state:** the `LoadingIndicator` spinner (hidden from screen readers) and the visible
+  text "Loading page 2" on the left of the pagination; `aria-busy="true"` on the pagination `nav`
+  and the table; the text is announced politely. After the rows arrive, the page opens and a
+  visually hidden status reads "Page 2 of 8, 50 of 200 rows loaded" (also announced).
+- **Focus:** Next is not disabled while loading, so keyboard focus stays on it. Clicks and Enter
+  during a load are ignored. After the load, focus is still on Next and pressing it again goes on.
+- **End:** `hasMore={false}` on the last page disables Next and Last; the status adds "all rows
+  loaded".
+- **Last (») and page numbers** load every block up to that page, one `onLoadMore` call at a time.
+  With a filter or search active, a page fills only with matching loaded rows, so it can take
+  several blocks. A load that adds no rows stops on the last page that has rows.
+- Rows per page changes the page size of loaded rows and goes to page 1; it does not change the
+  block size the server sends. Down, Page Down, and Cmd/Ctrl+End do not load in this mode.
+- Keep these behaviors when you edit the copy: do not disable Next while loading (focus would be
+  lost), keep the announced status text, and keep `aria-busy`.
+
 ## Filter syntax to give users
 
 Text `olivia`, `=exact`, `!excluded`. Numbers `> 100`, `>= 5`, `!= 0`, `10..50`. Dates
@@ -231,7 +288,8 @@ Text `olivia`, `=exact`, `!excluded`. Numbers `> 100`, `>= 5`, `!= 0`, `10..50`.
 ## Limits
 
 No row virtualization (pages of 25, 50, or 100 rows, or every loaded row with `onLoadMore`: keep
-loaded lists to a few thousand rows). No Load more button (Figma loads on scroll). No server-side
+loaded lists to a few thousand rows). No Load more button (Figma loads on scroll; use
+`loadMoreOn="pagination"` for paging). No server-side
 sort or filter hooks. Cells show formatted values only (no avatars or badges), in both modes. The
 filter calendar picks one day: type ranges (`2026-01-01..2026-03-31`), months (`2026-03`), and
 years (`2026`).
@@ -239,12 +297,19 @@ years (`2026`).
 ## Where to look
 
 - Docs: `/components/table/#data-grid`, sections Modes (`#modes`), View-only mode
-  (`#view-only-mode`), Row click (`#row-click`), and Load more (`#load-more`).
+  (`#view-only-mode`), Row click (`#row-click`), Load more (`#load-more`), and Load more from the
+  pagination (`#load-more-from-the-pagination`).
+- Tutorial: `/components/data-grid-tutorial/`, step 10 View-only mode and row click
+  (`#10-view-only-mode-and-row-click`), step 11 Load more from the server with the pagination
+  (`#11-load-more-from-the-server-with-the-pagination`), step 12 The finished grid.
 - Storybook `Components/Table/Data grid`: `View only`, `View only (Dark)`, `Row click`,
-  `Row click (Dark)`, `Load more`, `Load more (Dark)`; edit mode in `Default`, `Dark`,
-  `Custom columns`, and `Tutorial result`.
-- Example files: `data-grid-view-only.tsx`, `data-grid-load-more.tsx`, and the Figma Projects
-  dataset `data-grid-projects.ts` next to the `data-grid/` folder.
+  `Row click (Dark)`, `Load more`, `Load more (Dark)`, `Load more (pagination)`,
+  `Load more (pagination, Dark)`; edit mode in `Default`, `Dark`, `Custom columns`, and
+  `Tutorial result`.
+- Example files: `data-grid-view-only.tsx`, `data-grid-load-more.tsx`,
+  `data-grid-load-more-pagination.tsx`, `tutorial-step-10-view-only.tsx`,
+  `tutorial-step-11-load-more.tsx`, and the Figma Projects dataset `data-grid-projects.ts` next to
+  the `data-grid/` folder.
 
 ## Date filter calendar outside the grid
 
