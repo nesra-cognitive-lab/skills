@@ -179,8 +179,8 @@ Figma `Chart widget/Correlation`, Chart=Quadrant (Default `16851:45965`, Hover `
   <QuadrantChart title="Product Potential Map" summary="…" data={top20 /* { id, label, x, y, size, image } */} sizeLabel="GMV"
     formatSize={(v) => `Rp ${v.toLocaleString("id-ID")}`}
     xAxis={{ label: "Product clicks", domain: [0, 100_000], average: 36_111, averageLabel: "Avg clicks 36.111",
-      formatValue: (v) => (v === 0 ? "0" : `${(Math.round(v / 100) / 10).toLocaleString("id-ID")}K`) }}
-    yAxis={{ label: "CTOR", domain: [0, 4], average: 1.52, averageLabel: "Avg CTOR 1,52%", formatValue: (v) => `${v.toLocaleString("id-ID")}%` }}
+      formatTick: (v) => (v === 0 ? "0" : `${(v / 1000).toLocaleString("id-ID")}K`) }}
+    yAxis={{ label: "CTOR", domain: [0, 4], average: 1.52, formatValue: (v) => `${v.toLocaleString("id-ID")}%` }}
     quadrants={{ topLeft: { name: "Potential", description: "Low clicks · High CTOR", color: "blue" },
       topRight: { name: "Winning", description: "High clicks · High CTOR", color: "success" },
       bottomLeft: { name: "Need attention", description: "Low clicks · Low CTOR", color: "error" },
@@ -192,7 +192,8 @@ Figma `Chart widget/Correlation`, Chart=Quadrant (Default `16851:45965`, Hover `
 Rules:
 - The channel control is a Figma `Button` Outline Tiny (26px), not `Select` (smallest Select is 34px). The toggle is `Switch size="sm"` with `label`.
 - Pass the zone `description`s with short axis names (`Low clicks · High CTOR`); the default uses the full axis label (`Low Product clicks · …`).
-- The dashed lines are catalog averages in Figma (`36.111`, `1,52%`), not the mean of the 20 points: pass `average` and `averageLabel`.
+- The dashed lines are catalog averages in Figma (`36.111`, `1,52%`), not the mean of the 20 points: pass `average`. The X tag needs `averageLabel` (`Avg clicks …`, shorter than the axis label); the Y tag default `Avg CTOR 1,52%` already matches.
+- Ticks vs values: `formatTick` writes the axis ticks only (`25K`); `formatValue` writes the tooltip, the average tag, and the hidden table, and the ticks when `formatTick` is not set. Leave X `formatValue` empty so the tooltip uses the locale default (`51.844`); give Y a `formatValue` only for the `%` unit.
 - Bubbles: `image` per point (product photo; use your own images), `size` = GMV (24–56px by area), `label` = full product name. Names show under the bubble, 104px wide, two lines, cut with `…` automatically.
 - Bubble names have the Figma outline built in: a 3px stroke outside the letters in `bg-primary` (white in Light, `#0A0A0A` in Dark), no shadow or background box. Do not add a `text-shadow` or a background behind names.
 - Built-in layout per Figma: plot 724px tall, legend over the Y ticks, right zone labels 16px from the edge, tooltip 12px from the bubble with a Dot marker, sliders named `{axis} minimum` / `{axis} maximum`.
@@ -200,7 +201,6 @@ Rules:
 
 Not supported yet (waiting on a decision; do not build ad hoc):
 - **Show movement**: Figma has the toggle (pressed) but draws no movement in any state. `QuadrantChart` has no movement layer; the switch is state only.
-- **Short ticks + full tooltip numbers**: Figma ticks `25K`, tooltip `51.844`. `formatValue` writes both; with short ticks the tooltip reads `51,8K`.
 - **Static Hover state**: no prop to show a hovered bubble without a pointer (Storybook `· Hover` hovers it in a `play`).
 
 ## Not supported yet (do not promise; waiting on a decision)
