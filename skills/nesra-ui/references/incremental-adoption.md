@@ -32,7 +32,16 @@ Without the second `@source`, 2.x components render unstyled. If Tailwind is imp
 
 ## Imports while both releases are installed
 
-`package.json`: keep `"@nesra/ui"` on the older release and add `"@nesra/ui-v2": "npm:@nesra/ui@^2.0.0"` (or a `file:` tarball made with `pnpm --filter @nesra/ui pack`).
+`package.json`: keep `"@nesra/ui"` on the older release and add `"@nesra/ui-v2": "npm:@nesra/ui@^2.0.0"` (or a `file:` tarball).
+
+To make a tarball in the design-system repository, **build first, then pack**:
+
+```sh
+pnpm --filter @nesra/ui build
+pnpm --filter @nesra/ui pack
+```
+
+The package has no `prepack` script and ships only `dist`, so `pack` without a fresh `build` gives an archive with no components (or a stale `dist`). Check it with `tar -tzf nesra-ui-*.tgz | grep dist/index.js` before copying it into the app.
 
 - Code in a migrated area imports only `@nesra/ui-v2/<component>`, including `@nesra/ui-v2/nesra-scope`.
 - Code outside the migrated areas keeps `@nesra/ui/<component>`. Do not change those imports while migrating another area.
@@ -77,6 +86,18 @@ The scope follows `class="dark"` or `data-theme="dark"` on `<html>` or any ances
 - Fonts, `html`/`body` styles, and the reset stay with the older release. Load Manrope and Source Code Pro for 2.x.
 - App CSS that sets `--nesra-*` on its own selectors (for example a table height override) also changes 2.x components inside the scope.
 - `@keyframes` names are global. 2.x and 0.9 share `nesra-chart-dot-enter` with the same frames.
+
+## Two releases, one `@base-ui/react`
+
+Both releases can resolve the same `@base-ui/react`. Before design-system-nesra #303, 2.x `DropdownMenu`, `Popover`, and `Sheet` (like 0.9) attached their parts to Base UI's shared `Menu.Root`, `Popover.Root`, and `Dialog.Root` with `Object.assign`, so the release loaded last replaced the other's parts: a 2.x menu rendered 0.9 `Content` in `<body>`, outside the scope, with a transparent panel (account menu, language menu, platform switcher, mobile drawer). From the 2.x package that contains #303, 2.x uses its own root functions and never reads or writes parts on Base UI's roots, so 0.9 and 2.x no longer overwrite each other. 0.9 itself is unchanged and keeps working.
+
+- With that package installed, remove any build-time workaround (in the marketing app: `apps/client/vite/nesra-ui-own-roots.ts` and its use in `plugins` and `optimizeDeps`).
+- If a 2.x menu or Sheet still renders unstyled in `<body>`, check that the installed 2.x package contains the fix (`dist/components/dropdown-menu/dropdown-menu.js` must not contain `const DropdownMenuRoot = Menu.Root;`) before adding any patch.
+
+## Text and fonts inside a scope
+
+- Write text with the 2.x `Text` component (`@nesra/ui-v2/text`) and its `variant`, `size`, and `weight`. Do not write `type-nesra-*` classes in app code: the app's design-token checker does not know the 2.x classes (they are plain CSS, not Tailwind utilities), and they work only inside a scope. For clipped text use `TruncatedText` (see [Lymo components](lymo-components.md#truncated-text-always-truncatedtext)).
+- 2.x tokens name the font family `Manrope` (`--nesra-font-family-sans`). Fontsource's variable package registers it as `"Manrope Variable"`, which is a different family name, so 2.x text falls back to another font. Register the same font files again under the name `Manrope` with `@font-face` in the app stylesheet (the marketing app does this in `shared/styles/nesra-ui-v2.css`). Do not change the 2.x token. Source Code Pro (mono) needs the same check when the first 2.x Table or code element arrives.
 
 ## Finish the rollout
 
