@@ -130,3 +130,26 @@ These have no raised Current state in Figma. Do not add one.
 | `AppRail` item | `_App rail item` (`15386:3094`) | Active = 2px `icon-brand-primary` tile stroke |
 | `Sidebar.AccountMenu` card, `Sidebar.FeaturedCard` | `_Nav account card`, `_Nav featured card` | No Current state |
 
+### App rail products that cannot be opened yet
+
+`AppRail.Item disabled` (design-system-nesra #303) is for a product the app does not offer yet, such as Brain, Signal, and Agent before they launch, or every product while only the current one exists:
+
+```tsx
+<AppRail aria-label="Products">
+  {products.map((p) => (
+    <AppRail.Item
+      key={p.id}
+      active={p.id === "scale"}
+      disabled
+      icon={<Sidebar.PlatformLogo size="md" variant="product">{p.glyph}</Sidebar.PlatformLogo>}
+      label={p.label}
+      product={p.id}
+    />
+  ))}
+</AppRail>
+```
+
+- It sets `aria-disabled="true"`, stays focusable, ignores clicks and Enter or Space (no `onClick`, no navigation through `render`), and has no hover cue or pointer cursor. `active` still works: the current product keeps the ring, indicator, and `aria-current="page"`.
+- Figma has no disabled rail item, so the item is not dimmed. Do not add opacity or a hover-reset stylesheet in the app, and do not pass `aria-disabled` by hand or the native `disabled` attribute (it would drop the item from the tab order).
+- With an older 2.x package (before #303), upgrade it instead of patching CSS for `[aria-disabled]`.
+
