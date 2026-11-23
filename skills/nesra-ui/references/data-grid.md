@@ -275,10 +275,29 @@ next to Rows per page.
 - **Last (») and page numbers** load every block up to that page, one `onLoadMore` call at a time.
   With a filter or search active, a page fills only with matching loaded rows, so it can take
   several blocks. A load that adds no rows stops on the last page that has rows.
-- Rows per page changes the page size of loaded rows and goes to page 1; it does not change the
-  block size the server sends. Down, Page Down, and Cmd/Ctrl+End do not load in this mode.
-- Keep these behaviors when you edit the copy: do not disable Next while loading (focus would be
-  lost), keep the announced status text, and keep `aria-busy`.
+- **Rows per page also loads.** Choosing a size goes to page 1. When page 1 at the new size needs
+  rows that are not loaded (25 loaded, 50 chosen) and `hasMore` is `true`, the grid calls
+  `onLoadMore` until page 1 is full or `hasMore` is `false`, with the same spinner, place,
+  `aria-busy`, and polite announcement as Next. The visible text is "Loading more rows" (Figma's
+  Loading more text; "Loading page 1" would be wrong because page 1 already shows). When done, the
+  visually hidden status announces "Showing 50 rows per page, 50 of 128 rows loaded" until the next
+  page change.
+- **Enough rows or no more rows:** a smaller size, a size already loaded, or `hasMore={false}`
+  loads nothing and shows no spinner; the page shows the rows there are and the status announces
+  the new size. With 70 server rows and 100 chosen, the grid loads until `hasMore` is `false` and
+  shows 70.
+- **During a load,** a Rows per page change is ignored like a Next click: the select keeps its value
+  and focus returns to it. Rows per page never changes the block size the server sends.
+- Down, Page Down, and Cmd/Ctrl+End do not load in this mode. Load on scroll (`"scroll"`) has no
+  Rows per page (the Figma Load on scroll footer shows only the status); do not add one.
+
+| Action | Loaded rows fill the page | Rows missing, `hasMore` | Rows missing, no `hasMore` |
+| --- | --- | --- | --- |
+| Next, Last, or a page number | Opens the page | "Loading page N", then opens it | Opens the last page with rows |
+| Rows per page | Page 1 at the new size | Page 1, "Loading more rows" until full | Page 1 with the rows there are |
+
+- Keep these behaviors when you edit the copy: do not disable Next or the Rows per page select while
+  loading (focus would be lost), keep the announced status texts, and keep `aria-busy`.
 
 ## Filter syntax to give users
 
@@ -298,13 +317,13 @@ years (`2026`).
 
 - Docs: `/components/table/#data-grid`, sections Modes (`#modes`), View-only mode
   (`#view-only-mode`), Row click (`#row-click`), Load more (`#load-more`), and Load more from the
-  pagination (`#load-more-from-the-pagination`).
+  pagination (`#load-more-from-the-pagination`, including Rows per page and the action table).
 - Tutorial: `/components/data-grid-tutorial/`, step 10 View-only mode and row click
   (`#10-view-only-mode-and-row-click`), step 11 Load more from the server with the pagination
   (`#11-load-more-from-the-server-with-the-pagination`), step 12 The finished grid.
 - Storybook `Components/Table/Data grid`: `View only`, `View only (Dark)`, `Row click`,
   `Row click (Dark)`, `Load more`, `Load more (Dark)`, `Load more (pagination)`,
-  `Load more (pagination, Dark)`; edit mode in `Default`, `Dark`, `Custom columns`, and
+  `Load more (pagination, Dark)` (try Next, Last, and Rows per page 50 or 100); edit mode in `Default`, `Dark`, `Custom columns`, and
   `Tutorial result`.
 - Example files: `data-grid-view-only.tsx`, `data-grid-load-more.tsx`,
   `data-grid-load-more-pagination.tsx`, `tutorial-step-10-view-only.tsx`,
