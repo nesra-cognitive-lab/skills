@@ -56,8 +56,64 @@ Focus ring, per the audit in Chromium (Light and Dark):
 - Open: the `Select` and `MultiSelect` trigger turn `bg-secondary_hover`, and focus moves into the menu. Error uses `focus-ring-error`.
 - Do not change how a Nesra field takes focus or add a ring class to force the Focused look. To show a static Focused state in a page or story, focus the field for real.
 
+### Header Brand select: `size="xs"` and the square Brand avatar
+
+The Figma Header Type=Plane (`15387:3155`, Dark `16892:2089`) has a Brand select (`16435:102365`): a `Size=sm, Type=Avatar leading` Select that Figma overrides to 28px with 8px padding, and a 20px Brand logo with a 4px radius. The package follows that override (design-system-nesra #303):
+
+- `Select` and `Combobox` take `size="xs"`: a 28px trigger, 8px padding X, 10px radius, Text sm. The menu items, the popup search, and the label use the `sm` sizes. Only these two components have `xs`; `Input`, `Textarea`, and `MultiSelect` stay `sm`/`md`/`lg`.
+- `Avatar` takes `shape="square"` (4px radius at every size; the status icon stays round) and `size="2xs"` (20px). Defaults stay `shape="circle"` and `size="xs"`.
+- Use them for the header Brand switcher and other compact headers with a Brand or company logo. They are not Sizes or variants in the Figma Select and Avatar component sets yet, so do not use `xs` for ordinary form fields, and do not use `square` for people.
+
+```tsx
+<Select
+  aria-label="Brand"
+  items={brands}
+  value={brandId}
+  onValueChange={setBrandId}
+  size="xs"
+  leading={(value) =>
+    value ? <Avatar name={brands[value]} src={logos[value]} shape="square" size="2xs" /> : null
+  }
+>
+  {Object.entries(brands).map(([value, name]) => (
+    <Select.Option
+      key={value}
+      value={value}
+      leading={<Avatar name={name} src={logos[value]} shape="square" size="2xs" />}
+    >
+      {name}
+    </Select.Option>
+  ))}
+</Select>
+```
+
+A searchable Brand switcher uses `Combobox size="xs"` with `Combobox.TriggerValue` the same way. Do not set `h-7`, padding, or `rounded-*` classes on the trigger or the Avatar to fake these sizes: older packages without `xs`/`square` need an upgrade, not overrides.
+
+## Truncated text: always `TruncatedText`
+
+Every value that can be cut off (conversation and report titles, Brand, Shop, and product names, Sidebar labels, table cells) uses `TruncatedText` from `@nesra/ui/truncated-text` (design-system-nesra #303). It clips to `lines` 1 (default), 2, or 3 and shows the full text in a Tooltip on hover and keyboard focus only while the text is clipped. Text that fits gets no tooltip.
+
+```tsx
+import { TruncatedText } from "@nesra/ui/truncated-text";
+
+<TruncatedText size="small" weight="medium">{report.title}</TruncatedText>
+<TruncatedText as="div" lines={2} size="small">{insight.summary}</TruncatedText>
+<TruncatedText tooltip={`Renamed ${renamedAgo}`}>{name}</TruncatedText>
+
+<Sidebar.MenuButton icon={<MessageSquare />} render={<Link to={href} aria-label={title} />}>
+  <TruncatedText>{title}</TruncatedText>
+</Sidebar.MenuButton>
+```
+
+- Props: `as` (default `span`; `div` for a block), `lines`, `variant`/`size`/`weight` (the `Text` roles; omit all three to inherit, as inside `Sidebar.MenuButton`), `tooltip` (custom content, always shown). Other `span` props pass through; `title` is not accepted.
+- The parent must constrain the width (`min-w-0` in a flex row, or a fixed width).
+- Inside a link, button, or menu item it adds no tab stop: keyboard focus on that ancestor opens the tooltip, and clicks still go to the link. Clipped text with no interactive ancestor becomes focusable.
+- Do not use a `title` attribute, `Text truncate`, or a hand-built Tooltip for clipped values. `Text truncate` alone is only for text whose full value is visible elsewhere on the same screen.
+- An app that still has its own `TruncatedText` (the marketing app's `@marketing/ui`, built on 0.9) keeps it for 0.9 areas and uses the 2.x one inside `NesraScope`.
+
 ## Avatar status and add button
 
+- `size="2xs"` (20px) and `shape="square"` are for the header Brand logo, see [Header Brand select](#header-brand-select-sizexs-and-the-square-brand-avatar). At `2xs` the Status icon frame is 8px and the Online/Offline dot 5px.
 - Figma Status icon (`15095:2101`) has five Types, and each is a `status` value: `offline`, `online`, `avatar` (node `15095:2092`, a second image from `statusSrc`), `verified`, and `count`. There is no other status.
 - Online and Offline: a dot 4px smaller than the Status icon frame, so 6, 8, 10, 12, 14, and 16px for `xs`–`2xl`. Its 1.5px `bg-primary` ring is inside the dot, and the dot sits flush with the avatar's bottom right edge.
 - Verified: the blue `badge-check` fills the Status icon frame and overhangs the avatar by 2px.
