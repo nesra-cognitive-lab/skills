@@ -13,6 +13,8 @@ Source: Figma Lymo Dropdowns page (`18:0`), frame `Dropdown menu` (`15185:2576`)
 - The current account in a "Switch account" group is the Figma selected row: `className="bg-nesra-bg-secondary_hover text-nesra-text-primary"` on that `Item`. The current role in Button link: `className="data-[checked]:bg-nesra-bg-secondary_hover data-[checked]:text-nesra-text-primary"` on the `RadioItem`. A checked `AccountItem` draws that surface itself.
 - Long lists scroll with the Figma menu scrollbar; set the Figma height with `className="max-h-73"` (292px, Search simple). `DropdownMenu.Search` stays at the top and `DropdownMenu.Footer` at the bottom. The app owns the search query and filters the items.
 - Use the Figma content in mocks: Olivia Rhye `olivia@lymo.design`, Sienna Hewitt, Caitlyn King, photos (not initials) for people.
+- A real account without a photo shows initials, not the person icon. `Avatar` never derives initials from `name`: pass `initials` (for example `"OR"`, first letters of the first two words, decided by the app) to `DropdownMenu.AccountTrigger` and to the header `Avatar`. Without `initials` both show Avatar's default person icon. `AccountTrigger initials` needs `@nesra/ui` with design-system-nesra PR #304; `variant="button"` has no avatar and ignores it. `AccountItem` has no `initials` yet.
+- An entry Figma shows but the app cannot run yet (for example Dark mode before the app supports it): keep it in the Figma position with `disabled` on its `Item` or `SubTrigger`. The 2.x item draws Figma Disabled (50% opacity, no hover) and sets `aria-disabled`; a disabled `SubTrigger` needs no `SubContent`. Leave out entries for features the app does not have at all.
 
 ## Sign out: item or footer button
 
@@ -112,7 +114,7 @@ Account with Switch account and the Sign out footer button (Account button):
 </DropdownMenu>
 ```
 
-Avatar trigger with the profile header (Account avatar):
+Avatar trigger with the profile header (Account avatar). For an account without a photo, replace `src` with `initials` on both avatars, for example `initials="OR"`:
 
 ```tsx
 <DropdownMenu>
@@ -181,3 +183,7 @@ Account list (Account breadcrumb):
 ## Not in Figma
 
 The docs keep behavior sections with no Figma frame: Basic, Width, Radio items and checkbox items (Table menus), Controlled open state, Keep the menu open (`closeOnClick={false}`), Placement, Submenu, Multiple, Destructive, Item content, Notifications (`NotificationItem`), Triggers, and Header and footer. Use them for behavior and API, not as visual references.
+
+## Known issue
+
+`DropdownMenu.Footer` sits 4px higher than in Figma (found 24 Nov 2026, not fixed yet): it is `sticky bottom-0` with a negative bottom margin, so the menu's 4px bottom padding pushes it up. It covers the bottom 4px of the last item above it and leaves a 4px strip of the menu surface below the footer. Do not patch it with classes in an app; it will be fixed in `@nesra/ui`.
