@@ -186,6 +186,5 @@ The docs keep behavior sections with no Figma frame: Basic, Width, Radio items a
 
 ## Footer and Search positions
 
-- `DropdownMenu.Footer` sits on the menu's bottom edge and `DropdownMenu.Search` on its top edge, at rest and while a long menu scrolls. The last item and the first item keep their full 28px rows. Before design-system-nesra PR #305 the footer rose 4px over the last item and the Search row dropped 4px over the first item, each with a 4px strip at the edge.
-- With `@nesra/ui` that includes #305 there is nothing to adjust. With an older build, do not patch either part with classes in an app.
-- The Storybook stories "Footer flush with the last item", "Footer flush on a scrolled menu", Search simple, and Search advanced (and their Dark stories) check the positions in the browser with a `play` function.
+- `DropdownMenu.Footer` sits on the menu's bottom edge, at rest and while a long menu scrolls, and the last item keeps its full 28px row. Before design-system-nesra PR #305 it rose 4px over the last item and left a 4px strip below it. With `@nesra/ui` that includes #305 there is nothing to adjust; with an older build, do not patch it with classes in an app. The Storybook stories "Footer flush with the last item" and "Footer flush on a scrolled menu" check it in the browser.
+- Known issue, not fixed yet: `DropdownMenu.Search` sits 4px below the menu's top edge, leaves a 4px strip above it, and covers the top 4px of the first item (the mirror of the old footer offset). Do not patch it in an app either.
