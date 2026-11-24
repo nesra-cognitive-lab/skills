@@ -184,6 +184,7 @@ Account list (Account breadcrumb):
 
 The docs keep behavior sections with no Figma frame: Basic, Width, Radio items and checkbox items (Table menus), Controlled open state, Keep the menu open (`closeOnClick={false}`), Placement, Submenu, Multiple, Destructive, Item content, Notifications (`NotificationItem`), Triggers, and Header and footer. Use them for behavior and API, not as visual references.
 
-## Known issue
+## Footer and Search positions
 
-`DropdownMenu.Footer` sits 4px higher than in Figma (found 24 Nov 2026, not fixed yet): it is `sticky bottom-0` with a negative bottom margin, so the menu's 4px bottom padding pushes it up. It covers the bottom 4px of the last item above it and leaves a 4px strip of the menu surface below the footer. Do not patch it with classes in an app; it will be fixed in `@nesra/ui`.
+- `DropdownMenu.Footer` sits on the menu's bottom edge, at rest and while a long menu scrolls, and the last item keeps its full 28px row. Before design-system-nesra PR #305 it rose 4px over the last item and left a 4px strip below it. With `@nesra/ui` that includes #305 there is nothing to adjust; with an older build, do not patch it with classes in an app. The Storybook stories "Footer flush with the last item" and "Footer flush on a scrolled menu" check it in the browser.
+- Known issue, not fixed yet: `DropdownMenu.Search` sits 4px below the menu's top edge, leaves a 4px strip above it, and covers the top 4px of the first item (the mirror of the old footer offset). Do not patch it in an app either.
