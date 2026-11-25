@@ -161,7 +161,7 @@ Since design-system-nesra PR #328. `BarChart` and `ComboChart` take `activeValue
 Since design-system-nesra PR #328. `ChartCategoryNote` from `@nesra/ui/chart-overlay` (Nesra Scale Overview P6, `8127:129962`) puts a `Badge` sm Gray, such as "No 2025 data yet", centered on a category, 8px above the baseline (horizontal `BarChart`: 8px right of the baseline, centered on the row). Place it as a chart child like the other overlays; its `label` is listed with the chart data.
 
 - It does not read the values. Give that category `null` for every series (missing, never `0`) and pass the note only for it. An unknown `at` throws.
-- It works in `LineChart`, `AreaChart`, `BarChart`, and `ComboChart`.
+- Tested in `BarChart` and `ComboChart`, the charts Overview uses.
 
 ```tsx
 <ComboChart type="bar-bar" data={[{ id: "2025", label: "2025", values: { gmv: null, cost: null } }, …]} …>
