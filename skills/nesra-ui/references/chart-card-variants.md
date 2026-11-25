@@ -103,6 +103,38 @@ const legend = <ChartLegend items={series.map((s) => ({ ...s, marker: "square" a
 
 For the full card code, copy from the docs example of the same name.
 
+## Series toggle (hide a series from the legend)
+
+Since design-system-nesra PR #327 (not in npm 1.0.0; use the 2.x tarball or a later 2.x release). Nesra Scale Overview A-S3 (`8109:94915`): clicking a legend item hides its series. Figma Lymo draws a hidden item as `_Chart legend item` State=Muted.
+
+- The state is **controlled and lives in your component**. Pass the same `string[]` of hidden keys to `ChartLegend hiddenSeries` and to the chart's `hiddenSeries` (`BarChart`, `AreaChart`, `ComboChart`). Pass `onHiddenSeriesChange` to the legend: every item then becomes a `<button aria-pressed>` (true while the series shows), and click, Enter, or Space calls it with the new list.
+- A hidden series draws no bar, segment, area, or line, and has no tooltip row. **The axes keep the range of every series**, including the right axis of a hidden line or second bar, so nothing moves. The hidden data table keeps every series. Unknown keys are ignored, so one list can serve a current and a comparison chart.
+- A hidden item looks like `muted` (marker 40%, text `text-quaternary`). Figma draws no hover state: the toggle shows only the pointer and the focus ring. Do not add hover classes.
+- The DS does not stop the last series from being hidden (every series hidden shows axes only and no tooltip). If the screen needs at least one series, guard it in `onHiddenSeriesChange`.
+- A chart outside a `ChartCard` draws its own legend: pass `hiddenSeries` and `onHiddenSeriesChange` to the chart itself. A `BarChart` with `palette` names categories, so its legend never toggles.
+- `LineChart` has no `hiddenSeries`.
+
+```tsx
+const [hidden, setHidden] = useState<string[]>([]);
+<ChartCard
+  legend={
+    <ChartLegend
+      items={[
+        { key: "gmv", label: "Total GMV", color: "series-1" },
+        { key: "cost", label: "Total Cost", color: "series-2" },
+      ]}
+      hiddenSeries={hidden}
+      onHiddenSeriesChange={setHidden}
+    />
+  }
+>
+  <ChartCard.Header title="Actualization trend" subtitle="Trend data for Nov 1 - 13, 2026" />
+  <ComboChart type="bar-bar" barSeries={gmv} lineSeries={cost} hiddenSeries={hidden} … />
+</ChartCard>
+```
+
+Do not filter `series`, `barSeries`, or `data` yourself to hide a series: that rescales the axes, removes the series from the data table, and breaks `ComboChart`, which needs both `barSeries` and `lineSeries`.
+
 ## Single-series bar color
 
 - Default (Figma): a single, unstacked `BarChart` series paints **every bar in the series `color`**. Figma Magnitude Vertical bar, Horizontal bar, and the base `Bar chart` Type=Single are all `series-1`, in Light and Dark. Do not pass `palette`.
