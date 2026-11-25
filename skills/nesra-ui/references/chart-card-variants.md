@@ -50,6 +50,7 @@ The docs sidebar (group **Charts**) and Storybook (`Components/Charts/<group>/<c
 - Series colors: `series-1` … `series-8`, in series order. Same `key`/`label`/`color` in the chart `series` and in `ChartLegend` `items`.
 - Values inside the plot stay short (`formatValue={(v) => \`Rp ${v.toLocaleString("id-ID")}M\`}` on data in millions). The full amount goes in `ChartCard.Header` `value` (`Rp 146.000.000`).
 - Header as in Figma widgets: `icon` (`ChartLine` for line/area, `ChartColumn` for bar), `title`, `info`, `subtitle`, `tabs` (Tabs `minimal` `sm`: Day/Week/Month/Year), `actions` (UtilityButton tertiary `EllipsisVertical`), `value`, `change` (Badge `pill-color` success + `ArrowUp`), `comparison`. Then `ChartCard.Source sources={[...]} updated="..."`.
+- Source row alignment (since design-system-nesra PR #330): leave `ChartCard.Source` at the default `align="start"` (Figma Lymo `_Chart source`: icon, label, and sources left, updated time right) unless the Figma frame centers it. **Nesra Scale screens center it**: the Overview, Product, and Shop trend cards (Overview A1 `7910:103408`, Product A1 `7702:34006`, Shop A1 `7914:70`) use `align="center"`, without `updated`. With `updated`, a centered Source puts the time on its own centered row (interim decision; Figma has no example). Check the frame: the label text (`Source` or `Source :`) is a prop and differs between frames. Do not center the row with `className` (`justify-center` on the footer) or by wrapping it.
 
 ## Supported variants
 

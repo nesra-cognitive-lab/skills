@@ -191,6 +191,7 @@ import { TruncatedText } from "@nesra/ui/truncated-text";
 | Packed circles sized by value | `PackedBubbleChart` |
 | A small trend without axes | `Sparkline` (`trend` `positive`, `negative`, `neutral`; `type` `line`, `area`, `bar`) |
 | Funnel, radar, radial, heatmap, waterfall, Sankey | `FunnelChart`, `RadarChart`, `RadialChart`, `Heatmap`, `WaterfallChart`, `SankeyChart` |
+| A centered "Source" row under a chart, as on the Nesra Scale trend cards | `ChartCard.Source align="center"` (design-system-nesra #330). The default `start` is the Lymo layout. See [Chart card variants, Rules](chart-card-variants.md#rules). |
 | A chart inside a titled card with a legend | `ChartCard` with `ChartLegend`; a chart inside it drops its own surface. `ChartReferenceLine` draws an average or target line. See [Chart card variants](chart-card-variants.md) for every supported chart type with code. |
 | Widget plots | `ProportionBarChart`, `TimelineBandChart`, `RangeBarChart`, `LollipopChart`, `QuadrantChart` (`rangeSliders`; Product Potential Map recipe in `chart-card-variants.md`) |
 
