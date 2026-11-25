@@ -178,6 +178,8 @@ import { TruncatedText } from "@nesra/ui/truncated-text";
 | A line compared with the previous period | A series with `dashed: true`. Every other Line Chart series is solid; never dash a series only to tell lines apart. |
 | Stacked or 100% stacked areas or bars | `stacked`, `stackedPercent` |
 | One highlighted bar | `BarChart highlightIndex` |
+| The hovered or highlighted bar value in a pill above the category (Lymo `_Chart value tag`, Overview A4) | `activeValueTag` on `BarChart` or `ComboChart` (design-system-nesra #328). See [Value tag on the active category](chart-card-variants.md#value-tag-on-the-active-category). |
+| A note on a category without data, such as "No 2025 data yet" (Overview P6) | `ChartCategoryNote at label` as a chart child, with `null` values for that category (design-system-nesra #328). See [Empty category note](chart-card-variants.md#empty-category-note). |
 | Click a legend item to hide or show its series (Overview A-S3) | `ChartLegend hiddenSeries` + `onHiddenSeriesChange`, and the same `hiddenSeries` on `BarChart`, `AreaChart`, or `ComboChart` (design-system-nesra #327). Axes keep their range. See [Series toggle](chart-card-variants.md#series-toggle-hide-a-series-from-the-legend). |
 | A single-series bar | `BarChart` with one series: every bar in the series `color`, as in Figma. Only set `palette="series"` or `"heat"` when the user asks for one color per category. |
 | A value axis that ends on a round tick, follows the data, or is fixed | `valueDomain` on `LineChart`, `AreaChart`, `BarChart`, `ComboChart`: `"nice"` (default, Figma), `"data"`, or `[min, max]`. `ComboChart` also takes `lineValueDomain`. See [Chart card variants](chart-card-variants.md#value-axis-valuedomain). |

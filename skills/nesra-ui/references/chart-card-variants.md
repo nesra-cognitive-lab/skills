@@ -135,6 +135,40 @@ const [hidden, setHidden] = useState<string[]>([]);
 
 Do not filter `series`, `barSeries`, or `data` yourself to hide a series: that rescales the axes, removes the series from the data table, and breaks `ComboChart`, which needs both `barSeries` and `lineSeries`.
 
+## Value tag on the active category
+
+Since design-system-nesra PR #328. `BarChart` and `ComboChart` take `activeValueTag={(point) => ReactNode}`: the Figma Lymo `_Chart value tag` (`15727:5191`) on the active category, as Nesra Scale Overview A4 (`7944:36722`) shows the hovered day's Total GMV.
+
+- **Active category:** the hovered one, the one explored with the arrow keys, or the one hovered on a chart with the same `syncId` (current and comparison charts tag the same index together). Without hover, a `BarChart` shows it on `highlightIndex` (Figma `_Chart series/Bar` State=Highlight). Escape hides it with the tooltip.
+- **Placement:** one tag per category, centered on it, 6px above the category's tallest bar (a stack is one bar). Horizontal `BarChart`: 8px past the longest bar, centered on the row. `ComboChart` measures the bars of `bar-line`, `stacked-bar-line`, `bar-area`, and `bar-bar` on their own axes; lines, areas, and series hidden with `hiddenSeries` (design-system-nesra #327) are not counted, and with every bar series hidden there is no tag; `area-line` and `area-area` draw no tag.
+- **Text:** whatever the callback returns, such as `rupiah(point.values.gmv)` (A4 writes the full `Rp 209.023.400`). Return `undefined` for no tag on a point (for example a `null` value). The pill is styled by the DS: 24px, `bg-primary`, 1px `border-secondary`, `shadow-overlay-md`, Text xs Semibold `text-primary`. Do not wrap the text in your own pill or `Badge`.
+- The tag is `aria-hidden`; the tooltip and the hidden data table carry the value.
+- Not the same as `BarChart valueLabel`, which is always-visible SVG text after every bar (What moved).
+
+```tsx
+<ComboChart
+  type="bar-bar"
+  barSeries={{ key: "gmv", label: "Total GMV", color: "series-1" }}
+  lineSeries={{ key: "cost", label: "Total Cost", color: "series-2" }}
+  syncId="overview-trend"
+  activeValueTag={(point) => (point.values.gmv == null ? undefined : rupiah(point.values.gmv))}
+  …
+/>
+```
+
+## Empty category note
+
+Since design-system-nesra PR #328. `ChartCategoryNote` from `@nesra/ui/chart-overlay` (Nesra Scale Overview P6, `8127:129962`) puts a `Badge` sm Gray, such as "No 2025 data yet", centered on a category, 8px above the baseline (horizontal `BarChart`: 8px right of the baseline, centered on the row). Place it as a chart child like the other overlays; its `label` is listed with the chart data.
+
+- It does not read the values. Give that category `null` for every series (missing, never `0`) and pass the note only for it. An unknown `at` throws.
+- Tested in `BarChart` and `ComboChart`, the charts Overview uses.
+
+```tsx
+<ComboChart type="bar-bar" data={[{ id: "2025", label: "2025", values: { gmv: null, cost: null } }, …]} …>
+  <ChartCategoryNote at="2025" label="No 2025 data yet" />
+</ComboChart>
+```
+
 ## Single-series bar color
 
 - Default (Figma): a single, unstacked `BarChart` series paints **every bar in the series `color`**. Figma Magnitude Vertical bar, Horizontal bar, and the base `Bar chart` Type=Single are all `series-1`, in Light and Dark. Do not pass `palette`.
@@ -238,4 +272,4 @@ Not supported yet (waiting on a decision; do not build ad hoc):
 ## Not supported yet (do not promise; waiting on a decision)
 
 - Figma `_Chart bar` State=Muted is `bg-quaternary` (gray), and Periods Bar highlight shows gray bars with one `series-1` bar. `highlightIndex` dims the other bars to 35% of their own color instead. Figma Hover does not dim the other bars; the library dims them to 35% on hover.
-- Figma `_Chart bar` State=Active shows a value tag above the bar (`Rp 84M`); the library has no value tag on bars.
+- Figma `_Chart bar` State=Muted's gray bars: see above. The `_Chart value tag` of State=Active is supported since design-system-nesra #328: see [Value tag on the active category](#value-tag-on-the-active-category).
