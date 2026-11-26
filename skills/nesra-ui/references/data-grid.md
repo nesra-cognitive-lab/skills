@@ -26,6 +26,15 @@ the screen they build.
   list that needs the grid's search, filters, sort, columns, density, export, and totals, use the
   grid with `mode="view"` (see [Edit or view mode](#edit-or-view-mode)).
 
+## Horizontal scroll button and fade
+
+The Data grid keeps its own scroll container (vertical scroll with a sticky header, pinned columns,
+and the active cell outline), so it does not draw the Figma Scroll fade and round Scroll button. A
+plain `Table` in a card does not need the example: wrap it in `HorizontalScroll` from
+`@nesra/ui/metric` (`insetStart="auto"` keeps the pinned columns clear). Nesra Scale's Overview,
+Shop and Ads tables use it that way. Do not add a scroll prop to the Table or edit the example for
+this.
+
 ## Copy and render
 
 1. Copy `data-grid.tsx`, `use-data-grid.ts`, `columns.ts`, `export.ts`, and `motion.tsx` into the app, for example
