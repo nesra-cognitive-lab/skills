@@ -157,6 +157,39 @@ Since design-system-nesra PR #328. `BarChart` and `ComboChart` take `activeValue
 />
 ```
 
+## Tooltip rows without a series (`tooltipExtraRows`)
+
+Since design-system-nesra PR #347. `AreaChart`, `BarChart`, and `ComboChart` take `tooltipExtraRows={(point) => rows}`. It draws a plain row in the hover tooltip that is **not a series**: a label and a value with no color marker. Nesra Scale TikTok Ads D1 `8525:335933` (GMV Max Live trend, hover Oct 10) is the reference:
+
+| Row | Marker | Comes from |
+| --- | --- | --- |
+| `Cost per Live View  Rp 729` | series 1 | the series |
+| `Total Spend  Rp 18.000.000` | series 2 | the series |
+| `Gross Revenue  Rp 147.330.195` | **none** | `tooltipExtraRows` |
+| divider, then `Total ROI  8,19x` | none | `tooltipTotal` (already existed) |
+
+- **Figma facts.** The Figma Lymo `Chart tooltip` (`15393:2668`, Rows 1 to 6) has a marker on every row and no marker-less row. D1 draws the row as a Rows row with the marker removed. So the option is opt-in; a chart without it draws the Lymo tooltip. D-T1 to D-T13 (lane `8525:220612`) draw only the `10.10` hover pill and no tooltip, so Figma shows `Gross Revenue` for D1 only (Day, Oct 1 - 31). Do not assume it shows or hides for Week, Month, or the comparison charts; follow the product decision.
+- **Shape.** `(point: ChartPoint) => readonly { key?: string; label: ReactNode; value: ReactNode }[] | undefined`. The type is `ChartTooltipExtraRow`, exported from `@nesra/ui` and from `@nesra/ui/area-chart`, `@nesra/ui/bar-chart`, and `@nesra/ui/combo-chart`. Return `undefined` or `[]` for a day with no extra row.
+- **Placement and style (do not restyle).** The rows come after the series rows and before the `tooltipTotal` divider, in the order you return them. The label starts where a series marker starts (not after a 12px marker and 6px gap), in Text xs Regular `text-tertiary`. The value is Text xs Semibold `text-primary`, right-aligned in the same column as the series values.
+- **Values are yours to format.** `label` and `value` are `ReactNode` and are not formatted by the chart: pass the final text, as for `tooltipValue` and `tooltipTotal`. Write full Rupiah (`Rp 147.330.195`), and format with the app locale (`useNesraLocale` / `NesraI18nProvider`, id-ID by default) rather than hard-coding separators. A `0` stays `0`, so pass `Rp 0` for a zero. A `null` or `undefined` value shows "No value", as a series row does. Pass `null` for a day without data; never `"-"` or `"0"`.
+- **Tooltip only.** The rows are not in the hidden data table. A value readers need without hovering belongs in the summary or a table beside the chart.
+- **Long labels** widen the tooltip up to the chart width, then wrap; keep labels short.
+- **Do not** fake the row with a hidden or transparent series (it changes the axes, the legend, and the data table), with a long string in `tooltipValue`, with `tooltipTotal` (that one draws the divider and the Medium label), or with a custom tooltip. Derived figures such as `Total ROI` stay in `tooltipTotal`.
+- Not available on `LineChart` or the other charts yet; their tooltips are unchanged.
+
+```tsx
+<ComboChart
+  type="bar-bar"
+  data={days}
+  barSeries={{ key: "cplv", label: "Cost per Live View", color: "series-1" }}
+  lineSeries={{ key: "spend", label: "Total Spend", color: "series-2" }}
+  tooltipExtraRows={(point) => [
+    { label: "Gross Revenue", value: rupiah(grossRevenue[point.id]) }, // null shows "No value"
+  ]}
+  tooltipTotal={(point) => ({ label: "Total ROI", value: `${roi(point)}x` })}
+/>
+```
+
 ## Empty category note
 
 Since design-system-nesra PR #328. `ChartCategoryNote` from `@nesra/ui/chart-overlay` (Nesra Scale Overview P6, `8127:129962`) puts a `Badge` sm Gray, such as "No 2025 data yet", centered on a category, 8px above the baseline (horizontal `BarChart`: 8px right of the baseline, centered on the row). Place it as a chart child like the other overlays; its `label` is listed with the chart data.
