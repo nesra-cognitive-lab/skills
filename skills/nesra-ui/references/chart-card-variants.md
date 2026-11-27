@@ -49,19 +49,42 @@ The docs sidebar (group **Charts**) and Storybook (`Components/Charts/<group>/<c
 - Legend marker: `square` for bar and area, `line` for line. No card legend for a single-series bar: every bar is the series `color` and the header title names it.
 - Series colors: `series-1` … `series-8`, in series order. Same `key`/`label`/`color` in the chart `series` and in `ChartLegend` `items`.
 - Values inside the plot stay short (`formatValue={(v) => \`Rp ${v.toLocaleString("id-ID")}M\`}` on data in millions). The full amount goes in `ChartCard.Header` `value` (`Rp 146.000.000`).
-- Header as in Figma widgets: `icon` (`ChartLine` for line/area, `ChartColumn` for bar), `title`, `info`, `subtitle`, `tabs` (Tabs `minimal` `sm`: Day/Week/Month/Year), `actions` (UtilityButton tertiary `EllipsisVertical`), `value`, `change` (Badge `pill-color` success + `ArrowUp`), `comparison`. Then `ChartCard.Source sources={[...]} updated="..."`.
+- Header as in Figma widgets: `icon` (`ChartLine` for line/area, `ChartColumn` for bar), `title`, `info`, `subtitle`, `tabs` (the period control: on the Nesra Scale trend cards, A4 `7944:36722` and P11 `8205:67920`, a `ButtonGroup size="xs"` with Day/Week/Month/Year; see [Header layout](#header-layout-the-controls-wrap-under-the-title-chartcardheader)), `actions` (the 62 x 28px `SegmentedControl` Bar/Line chart type switch on those trend cards, or a UtilityButton tertiary `EllipsisVertical` as in Lymo), `value`, `change` (Badge `pill-color` success + `ArrowUp`), `comparison`. Then `ChartCard.Source sources={[...]} updated="..."`.
 - Source row alignment (since design-system-nesra PR #330): leave `ChartCard.Source` at the default `align="start"` (Figma Lymo `_Chart source`: icon, label, and sources left, updated time right) unless the Figma frame centers it. **Nesra Scale screens center it**: the Overview, Product, and Shop trend cards (Overview A1 `7910:103408`, Product A1 `7702:34006`, Shop A1 `7914:70`) use `align="center"`, without `updated`. With `updated`, a centered Source puts the time on its own centered row (interim decision; Figma has no example). Check the frame: the label text (`Source` or `Source :`) is a prop and differs between frames. Do not center the row with `className` (`justify-center` on the footer) or by wrapping it.
 
 ## Header layout: the controls wrap under the title (`ChartCard.Header`)
 
-Source: Figma Lymo `_Chart header` (`15769:7276`), Top row (`15769:7277`). Spacing fixed in design-system-nesra PR #351. Docs: `components/chart-card/#header-layout`. Storybook: `Components/Charts/Chart card and parts/Chart Card` › `Header Short Subtitle`, `Header Long Subtitle`, `Header Side By Side` (Light and Dark).
+Source: Figma Lymo `_Chart header` (`15769:7276`), Top row (`15769:7277`). Spacing fixed in design-system-nesra PR #351. Docs: `components/chart-card/#header-layout`. Storybook: `Components/Charts/Chart card and parts/Chart Card` › `Header Short Subtitle`, `Header Long Subtitle`, `Header Side By Side`, `Header At Figma Width` (Light and Dark).
 
 The top row of `ChartCard.Header` is a wrapping row. The **title group** (`icon`, `title`, `info`, `subtitle`) is at the start and the **controls** (`tabs`, then `actions`, as one group) are at the end.
 
 - **They share the title row only while they fit.** Then the controls sit at the right edge, top aligned with the title group. The title group ends with 16px of padding and the row has no column gap, so the space between the text and the controls is 16px or more.
 - **When they do not fit, the controls move under the title group.** The whole controls group starts a new line, 12px below the title group, at the left edge. This is the Lymo behavior ("on a narrow card the tabs and actions move under the title"), not a bug. There is no prop to keep them on the title row.
-- **They fit when** the title group width + 16px + the controls width is at most the header width. The header is the card width minus 42px (20px padding and a 1px border on each side). Example: Tabs `minimal` `sm` with Day, Week, Month, and Year (about 242px) + the `SegmentedControl` bar and line switch (62px) + 8px between them = about 312px. With a 299px subtitle the header must be about 627px wide (a card of about 669px). A 600px card puts the controls under the title.
-- **Nothing is truncated.** Do not add `truncate`, `line-clamp`, `max-w-*`, or `whitespace-nowrap` to the title or subtitle, and do not set widths on the header parts. A subtitle longer than the row wraps inside the title group. The controls keep their width and never shrink: controls wider than the header extend past its end edge (about 312px of controls in a 320px card), so choose controls that fit your narrowest card.
+- **They fit when** the title group width + 16px + the controls width is at most the header width. The header is the card width minus 42px (20px padding and a 1px border on each side).
+- **Control sizes (Nesra Scale `Chart controls`, `7772:71517`, as A4 and P11 draw them): 271 x 28px in Figma, about 268px in the DS.** Use `ButtonGroup size="xs"` for the period (Lymo Button group Size Tiny: 26px items in a 28px container, Text xs Medium, 10px item padding; Day, Week, Month, and Year are about 198px in the DS, 201px in Figma) + 8px + the `SegmentedControl` Bar/Line switch (62 x 28px: 2px padding, two 28 x 24px segments, 14px icons) = about 268px. With a 299px subtitle (title group 315px) the header must be about 583px wide (Figma P11 is 591.5px), a card of about 625px. A 600px card puts the controls under the title.
+```tsx
+<ChartCard.Header
+  title="Actualization trend"
+  subtitle="Nov 1 - 13, 2026 vs Oct 1 - 13, 2026"
+  tabs={
+    <ButtonGroup aria-label="Period" size="xs" value={[period]} onValueChange={([next]) => next && setPeriod(next)}>
+      <ButtonGroup.Item value="day">Day</ButtonGroup.Item>
+      <ButtonGroup.Item value="week">Week</ButtonGroup.Item>
+      <ButtonGroup.Item value="month">Month</ButtonGroup.Item>
+      <ButtonGroup.Item value="year">Year</ButtonGroup.Item>
+    </ButtonGroup>
+  }
+  actions={
+    <SegmentedControl aria-label="Chart type" value={type} onValueChange={setType}>
+      <SegmentedControl.Item aria-label="Bar chart" icon={<ChartColumn />} value="bar" />
+      <SegmentedControl.Item aria-label="Line chart" icon={<ChartLine />} value="line" />
+    </SegmentedControl>
+  }
+/>
+```
+- **Do not use `Tabs` for the trend card period.** `Tabs variant="minimal" size="sm"` (Lymo Horizontal tabs Button minimal, `15281:2148`) is 38px tall and about 242px wide for the same four labels, so the controls come to about 312px and the same subtitle needs a header of about 627px (a card of about 669px). The `Tabs` list matches Lymo; A4 and P11 simply do not draw it (Nesra Scale swaps the `_Chart header` Period tabs for the Button group above). The hidden Period tabs instance inside Lymo `_Chart header` points at an old "Button border" tab (253 x 44px) that is no longer in the Lymo `Horizontal tabs` set; ignore it.
+- **Known difference, not decided yet:** the Nesra Scale trend card (P11 `8130:128201`) is 617.5px wide with a 591.5px header, so its inset is 13px a side (12px padding + 1px border), whereas `ChartCard` is Lymo's 20px padding + 1px border (21px a side). In a 617.5px `ChartCard` the header is 575.5px, so a 299px subtitle plus the controls above (about 583px) still wraps by about 8px, where Figma shows one row. Do not override the card padding in the app; ask for a DS decision.
+- **Nothing is truncated.** Do not add `truncate`, `line-clamp`, `max-w-*`, or `whitespace-nowrap` to the title or subtitle, and do not set widths on the header parts. A subtitle longer than the row wraps inside the title group. The controls keep their width and never shrink: controls wider than the header extend past its end edge (about 268px of controls in a 300px card), so choose controls that fit your narrowest card.
 - **Two cards side by side line up only when both headers take the same number of lines.** A card whose subtitle fits beside the controls has a one-line header, and a card whose subtitle does not has a two-line header, so its plot starts lower by at least the controls' height plus 12px (50px with the controls above). Figma does not align them and neither does `ChartCard`. For a Comparison view, use subtitles of the same length (the same date format in both cards) and card widths where both fit, not a width near the point where the controls wrap. Never fix the difference with a spacer, a fixed header height, or a `min-h` on the header; check the layout at the widths you ship instead.
 
 ## Supported variants
